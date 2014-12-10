@@ -33,6 +33,38 @@ BoardController = RouteController.extend({
 
 Template.bucket.helpers({
   slots: function () {
-    return _.range(this.limit)
+
+    var bucket = this._id
+
+    // find cards for slots, or just return the slot number to denote empty
+    var res = _.range(this.limit).map(function(slot, i){
+      var card = Cards.findOne({bucket: bucket, preferredSlot: i})
+      console.log('found', card, slot, i)
+      return card || slot
+    })
+
+    return res
+  }
+})
+
+Template.bucket.events({
+  'click .slot-empty': function (evt, tpl) {
+    var slot = parseInt(this, 10)
+    var bucket = tpl.data._id
+    var board = tpl.data.board
+
+    console.log('slot:', slot, 'bucket:', bucket, 'board:', board)
+
+    Cards.insert({
+      name: "Name",
+      desc: "More info...",
+      bucket: bucket,
+      board: board,
+      preferredSlot: slot,
+      createdBy: Meteor.userId,
+      createdOn: Date.now(),
+      updatedOn: Date.now(),
+      editing: true
+    })
   }
 })

@@ -1,7 +1,66 @@
+@import "../variables.import.less";
+
 .bucket {
-  margin: 8px;
+  text-align: center;
+  margin:0;
+  border-bottom: solid 2px @color-accent;
+  padding:20px 4px;
+
   h1 {
     font-size: 14px;
+    padding: 0 4px;
+    color: @color-text;
+    text-align: right;
+  }
+  ul {
+    margin:0;
+    padding:0;
+  }
+  li {
+    list-style: none;
+  }
+
+  &:hover {
+    background: rgb(253,253,253);
+  }
+  .trash {
+    border-bottom-color:transparent;
   }
 }
 
+.slot {
+  box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
+  vertical-align: top;
+  overflow:hidden;
+  display: inline-block;
+  width: 142px;
+  height:142px;
+  margin:4px;
+
+  &:hover {
+    background: @color-light;
+  }
+
+  &.slot-empty {
+    box-shadow: 0 0px 0px 0 rgba(0,0,0,0.1);
+  }
+}
+
+.card {
+  header{
+    display: block;
+    padding: 6px;
+    background: @color-main;
+  }
+  h1 {
+    color: @color-text-light;
+    letter-spacing: 1px;
+    text-align: left;
+    font-size:18px;
+  }
+  p{
+    margin:0;
+    padding: 6px;
+    text-align:left;
+  }
+}

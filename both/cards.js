@@ -25,3 +25,11 @@ Cards = new Mongo.Collection('cards')
 Cards.findForUser = function (userId) {
   return Cards.find({createdBy: userId})
 }
+
+function yes () {return true} //TODO: limit access to editors
+
+Cards.allow({
+  insert: yes,
+  update: yes,
+  remove: yes
+})

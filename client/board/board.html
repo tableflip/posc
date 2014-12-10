@@ -18,8 +18,10 @@
     </header>
     <ul>
     {{#each slots}}
-      <li>
-        
+      <li class="slot {{#unless _id}} slot-empty {{/unless}}">
+        {{#if _id}}
+          {{>card}}
+        {{/if}}
       </li>
     {{/each}}
     </ul>
