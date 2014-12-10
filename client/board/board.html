@@ -1,6 +1,10 @@
+<template name="boardNew">
+  <h1>Creating board</h1>
+</template>
+
 <template name="board">
-  <h1>board</h1>
-  {{#each buckets _id}}
+  <h1>board {{board.name}}</h1>
+  {{#each buckets}}
     {{> bucket}}
   {{/each}}
 </template>
