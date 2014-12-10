@@ -1,0 +1,4 @@
+HomeController = RouteController.extend({
+
+})
+

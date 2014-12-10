@@ -1,0 +1,42 @@
+<template name="board">
+  <h1>board</h1>
+  {{#each buckets _id}}
+    {{> bucket}}
+  {{/each}}
+</template>
+
+<template name="bucket">
+  <div class="bucket">
+    <header>
+      <h1>{{name}}</h1>
+    </header>
+    {{#each cards}}
+      {{> card}}
+    {{/each}}
+  </div>
+</template>
+
+<template name="card">
+  <div class="card">
+    <header>
+      <h1>{{name}}</h1>
+    </header>
+    <p>{{desc}}</p>
+  </div>
+</template>
+
+<template name="editCard">
+  <form class="editCard">
+    <div class="input-group">
+      <label for="edit-card-name">Name</label>
+      <input type="text" class="form-control" id="edit-card-name" placeholder="Listen more"/>
+    </div>
+    <div class="input-group">
+      <label for="edit-card-desc">Description</label>
+      <input type="text" class="form-control" id="edit-card-name" placeholder="Understanding context helps to determine bias" />
+    </div>
+    <div class="input-group">
+      <button>Save</button>
+    </div>
+  </form>
+</template>
