@@ -31,14 +31,8 @@ BoardController = RouteController.extend({
   }
 })
 
-Template.board.helpers({
-  buckets: function (boardId) {
-    return Buckets.find({board: boardId}).fetch()
-  }
-})
-
 Template.bucket.helpers({
-  cards: function () {
-    return Cards.find({bucket: bucketId}).fetch()
+  slots: function () {
+    return _.range(this.limit)
   }
 })

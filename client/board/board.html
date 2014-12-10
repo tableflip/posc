@@ -3,20 +3,26 @@
 </template>
 
 <template name="board">
-  <h1>board {{board.name}}</h1>
+  <nav class="nav">
+    <h1>board {{board.name}}</h1>
+  </nav>
   {{#each buckets}}
     {{> bucket}}
   {{/each}}
 </template>
 
 <template name="bucket">
-  <div class="bucket">
+  <div class="bucket {{slugify name}}">
     <header>
       <h1>{{name}}</h1>
     </header>
-    {{#each cards}}
-      {{> card}}
+    <ul>
+    {{#each slots}}
+      <li>
+        
+      </li>
     {{/each}}
+    </ul>
   </div>
 </template>
 
