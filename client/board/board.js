@@ -39,7 +39,7 @@ Template.bucket.helpers({
     // find cards for slots, or just return the slot number to denote empty
     var res = _.range(this.limit).map(function(slot, i){
       var card = Cards.findOne({bucket: bucket, preferredSlot: i})
-      console.log('found', card, slot, i)
+      //console.log('found', card, slot, i)
       return card || slot
     })
 
