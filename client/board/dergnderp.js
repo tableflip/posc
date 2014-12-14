@@ -4,11 +4,12 @@
  As a jQuery plugin.
  */
 (function( $ ) {
+  console.log('dergnderp', $)
   var dragSrcEl = null
 
   $.event.props.push('dataTransfer')
 
-  $.fn.dreg = function () {
+  $.fn.derg = function () {
     this
       .attr('draggable', true)
       .on('dragstart', handleDragStart)
@@ -19,7 +20,7 @@
 
   $.fn.derp = function (cb) {
     cb = cb || function (dragged, dropTarget, dataTransfer) { $(dropTarget).append(dragged) }
-    
+
     this
       .on('dragenter', handleDragEnter)
       .on('dragover',  handleDragOver)

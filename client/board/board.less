@@ -22,36 +22,39 @@
   }
 
   &:hover {
-    background: rgb(253,253,253);
+
   }
-  .trash {
-    border-bottom-color:transparent;
+
+  &.trash {
+    border-color:transparent;
   }
 }
 
 .slot {
   background: rgb(253, 253, 253);
-  box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
-  border:solid 1px #F0F3F5;
-
   vertical-align: top;
-  overflow:hidden;
   display: inline-block;
   width: 142px;
   height:142px;
   margin:4px;
 
+
+  transition: background linear 0.2s;
   &:hover {
     background: rgb(245, 245, 245);
   }
 
-  &.slot-empty {
-    box-shadow: 0 0px 0px 0 rgba(0,0,0,0.1);
-    border-color:transparent;
+  &.dragover {
+    background: rgb(245, 245, 245);
   }
 }
 
 .card {
+  height:100%;
+  background: white;
+  box-shadow:0 1px 2px 0px rgba(0,0,0,0.2);
+  box-sizing:border-box;
+
   header{
     display: block;
     padding: 6px;
@@ -67,5 +70,13 @@
     margin:0;
     padding: 6px;
     text-align:left;
+  }
+
+  transition: all linear 0.1s ;
+
+  &.dragging{
+    opacity:0.8;
+    box-shadow:0 5px 5px 0 rgba(0,0,0,0.2);
+    transform: scale(1.01) rotate(1deg);
   }
 }

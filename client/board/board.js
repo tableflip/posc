@@ -28,8 +28,19 @@ BoardController = RouteController.extend({
       board: Boards.findOne(this.params._id),
       buckets: Buckets.find({board:this.params._id}).fetch()
     }
+  },
+
+  onAfterAction: function () {
+    console.log('BoardController.onAfterAction')
+
   }
 })
+
+Template.board.rendered = function () {
+  console.log('Board.rendered')
+  $('.card').derg()
+  $('.slot').derp()
+}
 
 Template.bucket.helpers({
   slots: function () {
