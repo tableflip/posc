@@ -12,13 +12,13 @@
 </template>
 
 <template name="bucket">
-  <div class="bucket {{slugify name}}">
+  <div class="bucket {{slugify name}}" data-bucket="{{_id}}">
     <header>
       <h1>{{name}}</h1>
     </header>
     <ul>
     {{#each slots}}
-      <li class="slot">
+      <li class="slot" data-slot="{{slot}}">
         {{#if _id}}
           {{>card}}
         {{/if}}
@@ -29,7 +29,7 @@
 </template>
 
 <template name="card">
-  <div class="card" draggable="true">
+  <div class="card" draggable="true" data-card="{{_id}}">
     <header>
       <h1>{{name}}</h1>
     </header>

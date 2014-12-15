@@ -4,34 +4,33 @@
  As a jQuery plugin.
  */
 (function( $ ) {
-  console.log('dergnderp', $)
   var dragSrcEl = null
 
   $.event.props.push('dataTransfer')
 
-  $.fn.derg = function () {
-    this
-      .attr('draggable', true)
-      .on('dragstart', handleDragStart)
-      .on('dragend', handleDragEnd)
+  $.derg = function (selector) {
+    $(document)
+      .on('dragstart', selector, handleDragStart)
+      .on('dragend', selector, handleDragEnd)
+    //.attr('draggable', true)
 
     return this
   }
 
-  $.fn.derp = function (cb) {
+  $.derp = function (selector, cb) {
     cb = cb || function (dragged, dropTarget, dataTransfer) { $(dropTarget).append(dragged) }
 
-    this
-      .on('dragenter', handleDragEnter)
-      .on('dragover',  handleDragOver)
-      .on('dragleave', handleDragLeave)
-      .on('drop', handleDrop(cb))
+    $(document)
+      .on('dragenter', selector, handleDragEnter)
+      .on('dragover', selector, handleDragOver)
+      .on('dragleave', selector, handleDragLeave)
+      .on('drop', selector, handleDrop(cb))
 
     return this
   }
 
   function handleDragStart(e) {
-    dragSrcEl = this;
+    dragSrcEl = this
     $(this).addClass('dragging')
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/html', this.outerHTML);
@@ -46,9 +45,10 @@
   }
 
   function handleDragOver(e) {
+    $(this).addClass('dragover')
     e.preventDefault()
     e.dataTransfer.dropEffect = 'move'
-    return false;
+    return false
   }
 
   function handleDragLeave(e) {
@@ -63,7 +63,9 @@
       if (dragged != dropTarget) {
         cb(dragged, dropTarget, e.dataTransfer)
       }
-      return false;
+
+      $('.dragover').removeClass('dragover')
+      return false
     }
   }
 }( jQuery ))
