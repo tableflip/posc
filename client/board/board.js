@@ -56,6 +56,8 @@ Template.board.rendered = function () {
     // we're dropping onto a card, so gonna have to dance.
     var cardInTheWay = $slotEl.find('.card').data('card')
     
+    if (cardInTheWay === cardId) return // We'll just leave this where we found it.
+
     if (!isFull(toBucketId)) {
       // there's room in this bucket so let's jiggle
       nudgeRight(Cards.findOne(cardInTheWay), Buckets.findOne(toBucketId))
