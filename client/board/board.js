@@ -46,9 +46,7 @@ Template.board.rendered = function () {
     var slot = parseInt($slotEl.attr('data-slot'))
     var toBucketId = $slotEl.parents('.bucket').data('bucket')
 
-    //console.log(cardId, 'to', toBucketId, slot)
-
-    console.log($slotEl.attr('data-slot'), card.preferredSlot, 'to', slot)
+    console.log(cardId, 'to', toBucketId, slot)
 
     if ($slotEl.find('.card').length === 0) {
       // slot is empty, so simples
@@ -57,27 +55,27 @@ Template.board.rendered = function () {
     }
     
     // we're dropping onto a card, so gonna have to dance.
-    var cardInTheWay = $slotEl.find('.card').data('card')
+    var cardInTheWay = Cards.findOne($slotEl.find('.card').data('card'))
     
-    if (cardInTheWay === cardId) {
+    if (cardInTheWay._id === cardId) {
       console.log('no bother')
       return // We'll just leave this where we found it.
     }
 
-    if (cardInTheWay && (slot === card.preferredSlot - 1 || slot === card.preferredSlot + 1)) {
+    if (cardInTheWay.bucket._id === toBucketId && (slot === card.preferredSlot - 1 || slot === card.preferredSlot + 1)) {
       // Swapsies
       console.log('swapsies!')
-      swapCards(card, Cards.findOne(cardInTheWay), Buckets.findOne(toBucketId))
+      swapCards(card, cardInTheWay, Buckets.findOne(toBucketId))
     } else if (!isFull(toBucketId)) {
       console.log('nudging right')
       // there's room in this bucket so let's jiggle
-      nudgeRight(Cards.findOne(cardInTheWay), Buckets.findOne(toBucketId))
+      nudgeRight(cardInTheWay, Buckets.findOne(toBucketId))
       Cards.update(cardId, { $set:{bucket:toBucketId, preferredSlot:slot}})
       
     } else {
       console.log('is full')
       // no more room in the bucket so let's swap places
-      Cards.update(cardInTheWay, { $set: {bucket: card.bucket, preferredSlot:card.preferredSlot}})
+      Cards.update(cardInTheWay._id, { $set: {bucket: card.bucket, preferredSlot:card.preferredSlot}})
       Cards.update(cardId, { $set:{bucket:toBucketId, preferredSlot:slot}})
     }    
   })
