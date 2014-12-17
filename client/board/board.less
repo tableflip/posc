@@ -1,5 +1,9 @@
 @import "../variables.import.less";
 
+body.board {
+  background: url(/img/brillant/brillant.png);
+}
+
 .bucket {
   text-align: center;
   margin:0 auto;
@@ -35,20 +39,44 @@
 }
 
 .slot {
-  background: rgb(253, 253, 253);
+  background: rgb(250, 250, 250);
   vertical-align: top;
   display: inline-block;
   width: 142px;
   height:142px;
   margin:4px;
 
-  transition: background linear 0.2s;
-  &:hover {
-    background: rgb(245, 245, 245);
+  transition: all linear 0.2s;
+}
+
+.slot-empty {
+
+  &:before {
+    content:'';
+    vertical-align: middle;
+    display: inline-block;
+    width:0;
+    height:100%;
+  }
+  &:after{
+    content:'+';
+    vertical-align: middle;
+    color: rgb(245, 245, 245);
+    font-size: 80px;
+    display: inline-block;
+    margin:0 auto;
+    transition: all linear 0.2s;
   }
 
-  &.dragover {
+  &:hover {
     background: rgb(245, 245, 245);
+
+    &:after{
+      color: @color-main;
+    }
+  }
+  &.dragover {
+    background: @color-light;
   }
 }
 
@@ -89,4 +117,13 @@
 }
 .dragover .card.dragging {
   transform: none;
+}
+
+@media
+(-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+  /* Retina-specific stuff here */
+  body.board {
+    background: url(/img/brillant/brillant_@2X.png);
+  }
 }

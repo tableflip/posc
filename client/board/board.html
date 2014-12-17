@@ -18,7 +18,7 @@
     </header>
     <ul>
     {{#each slots}}
-      <li class="slot" data-slot="{{slot}}">
+      <li class="slot {{#unless _id}}slot-empty{{/unless}}" data-slot="{{slot}}" title="{{#unless _id}}Double click to add a card{{else}}Drag to re-prioritise{{/unless}}">
         {{#if _id}}
           {{>card}}
         {{/if}}
