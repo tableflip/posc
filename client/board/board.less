@@ -105,18 +105,21 @@ body.board {
 
   transition: all linear 0.1s ;
 
-  &.dragging{
-    opacity:0.8;
+  &:active{
+    opacity:1;
     box-shadow:0 5px 5px 0 rgba(0,0,0,0.2);
-    transform: scale(1.01) rotate(1deg);
   }
 }
 
 .dragover .card {
-  transform: translateX(160px);
+  box-shadow:none;
+  opacity:0.4;
+  transform: scale(0.9);
 }
 .dragover .card.dragging {
+  box-shadow:0 5px 5px 0 rgba(0,0,0,0.2);
   transform: none;
+  opacity:1;
 }
 
 @media
