@@ -5,9 +5,9 @@ body.board {
 }
 
 .bucket {
-  text-align: center;
+  text-align: right;
   margin:0 auto;
-  max-width: 1000px;
+  width: 770px;
   border-bottom: solid 2px @color-accent;
   padding:20px 4px;
 
@@ -50,6 +50,7 @@ body.board {
 }
 
 .slot-empty {
+  text-align: center;
 
   &:before {
     content:'';
@@ -78,6 +79,10 @@ body.board {
   &.dragover {
     background: @color-light;
   }
+}
+
+.slot-disabled {
+  display: none;
 }
 
 .card {

@@ -48,9 +48,9 @@ Template.board.rendered = function () {
 
     console.log(cardId, 'to', toBucketId, slot)
 
+
     if ($slotEl.find('.card').length === 0) {
       // slot is empty, so simples
-      console.log('empty slot')
       return Cards.update(cardId, { $set: {bucket: toBucketId, preferredSlot: slot} })
     }
     
@@ -58,11 +58,10 @@ Template.board.rendered = function () {
     var cardInTheWay = Cards.findOne($slotEl.find('.card').data('card'))
     
     if (cardInTheWay._id === cardId) {
-      console.log('no bother')
       return // We'll just leave this where we found it.
     }
 
-    if (cardInTheWay.bucket._id === toBucketId && (slot === card.preferredSlot - 1 || slot === card.preferredSlot + 1)) {
+    if (card.bucket._id === toBucketId && (slot === card.preferredSlot - 1 || slot === card.preferredSlot + 1)) {
       // Swapsies
       console.log('swapsies!')
       swapCards(card, cardInTheWay, Buckets.findOne(toBucketId))
@@ -112,17 +111,18 @@ function swapCards(card1, card2, bucket) {
 Template.bucket.helpers({
   slots: function () {
 
-    var bucket = this._id
+    var cards = Cards.find({bucket: this._id}, {sort:[['preferredSlot', 'asc']]}).fetch()
 
-    // find cards for slots, or just return the slot number to denote empty
-    var res = _.range(this.limit).map(function(slot, i){
-      var card = Cards.findOne({bucket: bucket, preferredSlot: i})
-      if (card) card.slot = slot
+    // add in slot property
+    cards = cards.map(function (c, i){ c.slot = i; return c })
 
-      return card || { slot: slot }
-    })
+    if (cards.length < this.limit) {
+      // editable slot
+      cards.push({ slot: cards.length })
+    }
 
-    return res
+    // zeroth slot is far right...
+    return cards.reverse()
   }
 })
 
