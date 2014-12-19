@@ -48,9 +48,8 @@ Template.board.rendered = function () {
 
     console.log(cardId, 'to', toBucketId, slot)
 
-
     if ($slotEl.find('.card').length === 0) {
-      // slot is empty, so simples
+      // slot is empty
       return Cards.update(cardId, { $set: {bucket: toBucketId, preferredSlot: slot} })
     }
     
@@ -61,22 +60,20 @@ Template.board.rendered = function () {
       return // We'll just leave this where we found it.
     }
 
-    if (card.bucket._id === toBucketId && (slot === card.preferredSlot - 1 || slot === card.preferredSlot + 1)) {
-      // Swapsies
-      console.log('swapsies!')
-      swapCards(card, cardInTheWay, Buckets.findOne(toBucketId))
-    } else if (!isFull(toBucketId)) {
-      console.log('nudging right')
-      // there's room in this bucket so let's jiggle
+    if (card.bucket !== toBucketId) {
+      // trans bucketing
+      return swapCards(card, cardInTheWay)
+    }
+
+    if (card.preferredSlot > cardInTheWay.preferredSlot) {
       nudgeRight(cardInTheWay, Buckets.findOne(toBucketId))
       Cards.update(cardId, { $set:{bucket:toBucketId, preferredSlot:slot}})
-      
-    } else {
-      console.log('is full')
-      // no more room in the bucket so let's swap places
-      Cards.update(cardInTheWay._id, { $set: {bucket: card.bucket, preferredSlot:card.preferredSlot}})
+    }
+
+    if (card.preferredSlot < cardInTheWay.preferredSlot) {
+      nudgeLeft(cardInTheWay, Buckets.findOne(toBucketId))
       Cards.update(cardId, { $set:{bucket:toBucketId, preferredSlot:slot}})
-    }    
+    }
   })
 }
 
@@ -88,7 +85,8 @@ function isFull(bucketId) {
 
 function nudgeRight(card, bucket) {
   if (!card) return;
-  var nextSlot = (card.preferredSlot + 1) % bucket.limit
+  var nextSlot = card.preferredSlot + 1
+  if (nextSlot > bucket.limit) return;
   var nextCard = Cards.findOne({bucket: bucket._id, preferredSlot: nextSlot})
   nudgeRight(nextCard, bucket)
   Cards.update(card._id, { $set: {preferredSlot: nextSlot}})
@@ -97,15 +95,16 @@ function nudgeRight(card, bucket) {
 function nudgeLeft(card, bucket) {
   if (!card) return;
   var previousSlot = (card.preferredSlot - 1) % bucket.limit
+  if (previousSlot < 0) return;
   var previousCard = Cards.findOne({bucket: bucket._id, preferredSlot: previousSlot})
   nudgeLeft(previousCard, bucket)
   Cards.update(card._id, { $set: {preferredSlot: previousSlot}})
 }
 
-function swapCards(card1, card2, bucket) {
+function swapCards(card1, card2) {
   if (!card1 || !card2) return;
-  Cards.update(card1._id, { $set: {preferredSlot: card2.preferredSlot}})
-  Cards.update(card2._id, { $set: {preferredSlot: card1.preferredSlot}})
+  Cards.update(card1._id, { $set: {bucket: card2.bucket, preferredSlot: card2.preferredSlot}})
+  Cards.update(card2._id, { $set: {bucket: card1.bucket, preferredSlot: card1.preferredSlot}})
 }
 
 Template.bucket.helpers({
