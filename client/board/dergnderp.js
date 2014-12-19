@@ -13,25 +13,33 @@
     var dragSrcEl = null
 
     $(document)
-      .on('dragstart', dragSelector, handleDragStart)
+      .on('dragstart', dragSelector, function handleDragStart(e) {
+        dragSrcEl = this
+        $(this).addClass('dragging')
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', this.outerHTML);
+      })
       .on('dragend', dragSelector, handleDragEnd)
 
     $(document)
       .on('dragenter', dropSelector, handleDragEnter)
       .on('dragover', dropSelector, handleDragOver)
       .on('dragleave', dropSelector, handleDragLeave)
-      .on('drop', dropSelector, handleDrop(cb))
+      .on('drop', dropSelector, function (e) {
+        e.stopPropagation()
+        var dropTarget = this
+        var dragged = dragSrcEl
+        if (dragged != dropTarget) {
+          cb(dragged, dropTarget, e.dataTransfer)
+        }
+
+        $('.dragover').removeClass('dragover')
+        return false
+      })
 
     return this
   }
-
-  function handleDragStart(e) {
-    dragSrcEl = this
-    $(this).addClass('dragging')
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/html', this.outerHTML);
-  }
-
+  
   function handleDragEnd(e) {
     $('.dragging').removeClass('dragging')
   }
@@ -51,17 +59,4 @@
     $(this).removeClass('dragover')
   }
 
-  function handleDrop(cb) {
-    return function (e) {
-      e.stopPropagation()
-      var dropTarget = this
-      var dragged = dragSrcEl
-      if (dragged != dropTarget) {
-        cb(dragged, dropTarget, e.dataTransfer)
-      }
-
-      $('.dragover').removeClass('dragover')
-      return false
-    }
-  }
 }( jQuery ))
