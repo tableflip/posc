@@ -26,7 +26,7 @@ BoardController = RouteController.extend({
     return {
       _id: this.params._id,
       board: Boards.findOne(this.params._id),
-      buckets: Buckets.find({board:this.params._id}).fetch()
+      buckets: Buckets.find({board:this.params._id}, {sort: [['preferredSlot', 'asc']]}).fetch()
     }
   },
 
@@ -38,45 +38,60 @@ BoardController = RouteController.extend({
 
 Template.board.rendered = function () {
   console.log('Board.rendered')
-  $.derg('.card')
-  $.derp('.slot', function (cardEl, slotEl) {
-    var $slotEl = $(slotEl)
-    var cardId = $(cardEl).data('card')
-    var card = Cards.findOne(cardId)
-    var slot = parseInt($slotEl.attr('data-slot'))
-    var toBucketId = $slotEl.parents('.bucket').data('bucket')
-
-    console.log(cardId, 'to', toBucketId, slot)
-
-    if ($slotEl.find('.card').length === 0) {
-      // slot is empty
-      return Cards.update(cardId, { $set: {bucket: toBucketId, preferredSlot: slot} })
-    }
-    
-    // we're dropping onto a card, so gonna have to dance.
-    var cardInTheWay = Cards.findOne($slotEl.find('.card').data('card'))
-    
-    if (cardInTheWay._id === cardId) {
-      return // We'll just leave this where we found it.
-    }
-
-    if (card.bucket !== toBucketId) {
-      // trans bucketing
-      return swapCards(card, cardInTheWay)
-    }
-
-    if (card.preferredSlot > cardInTheWay.preferredSlot) {
-      nudgeRight(cardInTheWay, Buckets.findOne(toBucketId))
-      Cards.update(cardId, { $set:{bucket:toBucketId, preferredSlot:slot}})
-    }
-
-    if (card.preferredSlot < cardInTheWay.preferredSlot) {
-      nudgeLeft(cardInTheWay, Buckets.findOne(toBucketId))
-      Cards.update(cardId, { $set:{bucket:toBucketId, preferredSlot:slot}})
-    }
-  })
+  $.dd('.card', '.slot', cardDrop)
+  $.dd('.bucket', '.bucket', bucketDrop)
 }
 
+function bucketDrop (draggedEl, dropEl) {
+
+  var draggedId = $(draggedEl).data('bucket')
+  var dropId = $(dropEl).data('bucket')
+  if (draggedId === dropId) return;
+
+  var draggedBucket = Buckets.findOne(draggedId)
+  var dropBucket = Buckets.findOne(dropId)
+
+  Buckets.update(dropId, { $set: { preferredSlot: draggedBucket.preferredSlot}})
+  Buckets.update(draggedId, { $set: { preferredSlot: dropBucket.preferredSlot}})
+  console.log('bucketDrop', draggedEl, dropEl)
+}
+
+function cardDrop (cardEl, slotEl) {
+  var $slotEl = $(slotEl)
+  var cardId = $(cardEl).data('card')
+  var card = Cards.findOne(cardId)
+  var slot = parseInt($slotEl.attr('data-slot'))
+  var toBucketId = $slotEl.parents('.bucket').data('bucket')
+
+  console.log(cardId, 'to', toBucketId, slot)
+
+  if ($slotEl.find('.card').length === 0) {
+    // slot is empty
+    return Cards.update(cardId, {$set: {bucket: toBucketId, preferredSlot: slot}})
+  }
+
+  // we're dropping onto a card, so gonna have to dance.
+  var cardInTheWay = Cards.findOne($slotEl.find('.card').data('card'))
+
+  if (cardInTheWay._id === cardId) {
+    return // We'll just leave this where we found it.
+  }
+
+  if (card.bucket !== toBucketId) {
+    // trans bucketing
+    return swapCards(card, cardInTheWay)
+  }
+
+  if (card.preferredSlot > cardInTheWay.preferredSlot) {
+    nudgeRight(cardInTheWay, Buckets.findOne(toBucketId))
+    Cards.update(cardId, {$set: {bucket: toBucketId, preferredSlot: slot}})
+  }
+
+  if (card.preferredSlot < cardInTheWay.preferredSlot) {
+    nudgeLeft(cardInTheWay, Buckets.findOne(toBucketId))
+    Cards.update(cardId, {$set: {bucket: toBucketId, preferredSlot: slot}})
+  }
+}
 function isFull(bucketId) {
   var limit = Buckets.findOne(bucketId).limit
   var cards = Cards.find({bucket: bucketId}).count()

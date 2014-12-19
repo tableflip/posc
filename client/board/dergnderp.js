@@ -4,27 +4,23 @@
  As a jQuery plugin.
  */
 (function( $ ) {
-  var dragSrcEl = null
 
   $.event.props.push('dataTransfer')
 
-  $.derg = function (selector) {
-    $(document)
-      .on('dragstart', selector, handleDragStart)
-      .on('dragend', selector, handleDragEnd)
-    //.attr('draggable', true)
-
-    return this
-  }
-
-  $.derp = function (selector, cb) {
+  $.dd = function (dragSelector, dropSelector, cb) {
     cb = cb || function (dragged, dropTarget, dataTransfer) { $(dropTarget).append(dragged) }
 
+    var dragSrcEl = null
+
     $(document)
-      .on('dragenter', selector, handleDragEnter)
-      .on('dragover', selector, handleDragOver)
-      .on('dragleave', selector, handleDragLeave)
-      .on('drop', selector, handleDrop(cb))
+      .on('dragstart', dragSelector, handleDragStart)
+      .on('dragend', dragSelector, handleDragEnd)
+
+    $(document)
+      .on('dragenter', dropSelector, handleDragEnter)
+      .on('dragover', dropSelector, handleDragOver)
+      .on('dragleave', dropSelector, handleDragLeave)
+      .on('drop', dropSelector, handleDrop(cb))
 
     return this
   }

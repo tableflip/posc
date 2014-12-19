@@ -52,3 +52,11 @@ Buckets.createBuckets = function (boardId) {
   return bucketIds
 }
 
+function yes () {return true} //TODO: limit access to editors
+function no () {return false} //TODO: limit access to editors
+
+Buckets.allow({
+  insert: no,
+  update: yes,
+  remove: no
+})
