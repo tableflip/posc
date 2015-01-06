@@ -51,8 +51,6 @@ function cardDrop (cardEl, slotEl) {
   var toBucket = Buckets.findOne(toBucketId)
   var card = Cards.findOne(cardId)
 
-  console.log(cardId, 'to', toBucketId, slot)
-  
   if ($slotEl.find('.card').length === 0) {
     // slot is empty
     if (card.bucket !== toBucketId) {
@@ -61,7 +59,7 @@ function cardDrop (cardEl, slotEl) {
 
     } else {
       // move card and close the gap
-      Cards.update(cardId, {$set: {preferredSlot: slot}})
+      Cards.update(cardId, {  $set: {preferredSlot: slot}})
       nudgeRight(card, Buckets.findOne(toBucketId))
     }
 
@@ -87,8 +85,8 @@ function cardDrop (cardEl, slotEl) {
 
     } else {
       // make room and drop
-      nudgeLeft(cardInTheWay, Buckets.findOne(toBucketId))
       Cards.update(cardId, {$set: {bucket: toBucketId, preferredSlot: slot}})
+      nudgeLeft(cardInTheWay, Buckets.findOne(toBucketId))
     }
   }
 }
