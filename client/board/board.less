@@ -6,17 +6,29 @@ body.board {
 
 .bucket {
   text-align: right;
-  margin:0 auto;
+  margin:24px auto;
   width: 770px;
-  border-bottom: solid 2px @color-accent;
   padding:0 4px 20px;
+  border-top: solid 3px @color-accent;
 
-  h1 {
-    font-size: 14px;
-    padding: 10px 4px 8px;
-    color: @color-text;
+  .bucket-header {
     text-align: right;
+
+    h1 {
+      display:inline-block;
+      width:142px;
+      padding: 8px 0px;
+      margin: 0 4px 4px;
+      font-size: 14px;
+      line-height: 1;
+      letter-spacing: 1px;
+      color: @color-text-light;
+      background: @color-accent;
+      text-align: center;
+      cursor: ns-resize;
+    }
   }
+
   ul {
     margin:0;
     padding:0;
@@ -29,12 +41,38 @@ body.board {
     background: transparent;
   }
 
-  &:hover {
-
+  &.dragging {
+    background: #eeeeee;
   }
 
   &.trash {
-    border-color:transparent;
+    border-color:#eee;
+
+    .bucket-header {
+      background: #eee;
+      margin-left: -4px;
+      margin-right: -4px;
+      margin-bottom:4px;
+      h1{
+        background: #eee;
+        cursor: default;
+      }
+    }
+
+    .card {
+      opacity:0.5;
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+    .slot-empty {
+      &:after {
+        content: '×';
+      }
+      &:hover:after {
+        color: @color-text-light;
+      }
+    }
   }
 }
 
@@ -46,7 +84,7 @@ body.board {
   height:142px;
   margin:4px;
 
-  transition: all linear 0.2s;
+  transition: all linear 0.1s;
 }
 
 .slot-empty {
@@ -66,7 +104,7 @@ body.board {
     font-size: 80px;
     display: inline-block;
     margin:0 auto;
-    transition: all linear 0.2s;
+    transition: all linear 0.1s;
   }
 
   &:hover {
@@ -91,6 +129,7 @@ body.board {
     display: block;
     padding: 6px;
     background: @color-main;
+    cursor: move;
   }
   h1 {
     color: @color-text-light;
@@ -103,6 +142,7 @@ body.board {
     margin:0;
     padding: 6px;
     text-align:left;
+    color:@color-text;
   }
 
   transition: all linear 0.1s ;
@@ -116,12 +156,15 @@ body.board {
 .dragover .card {
   box-shadow:none;
   opacity:0.4;
+
+  -webkit-transform: scale(0.9);
   transform: scale(0.9);
 }
 .dragover .card.dragging {
   box-shadow:0 5px 5px 0 rgba(0,0,0,0.2);
-  transform: none;
   opacity:1;
+  -webkit-transform: none;
+  transform: none;
 }
 
 @media

@@ -8,7 +8,6 @@
     desc: "Do these things first"
     board: "boardId"
     limit: 5,
-    sort: "name",
     preferredSlot: 0,
     createdBy: userId,
     createdOn: timestamp,
@@ -34,7 +33,6 @@ Buckets.createBuckets = function (boardId) {
       desc: "",
       board: boardId,
       limit: 5,
-      sort: 'manual',
       preferredSlot: index,
       createdBy: this.userId,
       createdOn: Date.now()
@@ -42,7 +40,8 @@ Buckets.createBuckets = function (boardId) {
   })
 
   // trash is unbounded
-  buckets[4].limit = 0;
+  buckets[4].limit = 0
+  buckets[4].isTrash = true
 
   var bucketIds = buckets.map(function (bucket) {
     return Buckets.insert(bucket)
@@ -59,4 +58,23 @@ Buckets.allow({
   insert: no,
   update: yes,
   remove: no
+})
+
+Meteor.methods({
+  swapBuckets: function (fromId, toId) {
+    var from = Buckets.findOne(fromId)
+    var to = Buckets.findOne(toId)
+
+    if (to.isTrash) {
+      Cards.update({bucket: fromId}, { $set: { bucket: toId }}, { multi:true })
+      return
+    }
+
+    if (from.isTrash) {
+      return // send a 401, and show visual cue that it's not possible
+    }
+
+    Buckets.update(fromId, { $set: { name: to.name, preferredSlot: to.preferredSlot } })
+    Buckets.update(toId, { $set: { name: from.name, preferredSlot: from.preferredSlot } })
+  }
 })

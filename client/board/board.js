@@ -28,40 +28,28 @@ BoardController = RouteController.extend({
       board: Boards.findOne(this.params._id),
       buckets: Buckets.find({board:this.params._id}, {sort: [['preferredSlot', 'asc']]}).fetch()
     }
-  },
-
-  onAfterAction: function () {
-    console.log('BoardController.onAfterAction')
-
   }
 })
 
 Template.board.rendered = function () {
-  console.log('Board.rendered')
   $.dd('.card', '.slot', cardDrop)
   $.dd('.bucket', '.bucket', bucketDrop)
 }
 
 function bucketDrop (draggedEl, dropEl) {
-
   var draggedId = $(draggedEl).data('bucket')
   var dropId = $(dropEl).data('bucket')
   if (draggedId === dropId) return;
-
-  var draggedBucket = Buckets.findOne(draggedId)
-  var dropBucket = Buckets.findOne(dropId)
-
-  Buckets.update(dropId, { $set: { preferredSlot: draggedBucket.preferredSlot}})
-  Buckets.update(draggedId, { $set: { preferredSlot: dropBucket.preferredSlot}})
-  console.log('bucketDrop', draggedEl, dropEl)
+  Meteor.call('swapBuckets', draggedId, dropId)
 }
 
 function cardDrop (cardEl, slotEl) {
   var $slotEl = $(slotEl)
   var cardId = $(cardEl).data('card')
-  var card = Cards.findOne(cardId)
   var slot = parseInt($slotEl.attr('data-slot'))
   var toBucketId = $slotEl.parents('.bucket').data('bucket')
+
+  var card = Cards.findOne(cardId)
 
   console.log(cardId, 'to', toBucketId, slot)
 
@@ -92,6 +80,7 @@ function cardDrop (cardEl, slotEl) {
     Cards.update(cardId, {$set: {bucket: toBucketId, preferredSlot: slot}})
   }
 }
+
 function isFull(bucketId) {
   var limit = Buckets.findOne(bucketId).limit
   var cards = Cards.find({bucket: bucketId}).count()
@@ -122,12 +111,18 @@ function swapCards(card1, card2) {
   Cards.update(card2._id, { $set: {bucket: card1.bucket, preferredSlot: card1.preferredSlot}})
 }
 
+// Render slots
 Template.bucket.helpers({
   slots: function () {
 
     var cards = Cards.find({bucket: this._id}, {sort:[['preferredSlot', 'asc']]}).fetch()
 
-    // add in slot property
+    if (this.isTrash) { // force first item in trash to always be empty
+      cards.push({})
+      return cards
+    }
+
+    // add in slot property to all cards / slots
     cards = cards.map(function (c, i){ c.slot = i; return c })
 
     if (cards.length < this.limit) {
@@ -145,12 +140,13 @@ Template.bucket.events({
     evt.stopPropagation()
   },
   'dblclick .slot': function (evt, tpl) {
+    if (tpl.data.isTrash) return
+
     var slot = parseInt(this.slot, 10)
     var bucket = tpl.data._id
     var board = tpl.data.board
 
-    console.log('slot:', slot, 'bucket:', bucket, 'board:', board)
-
+    //console.log('slot:', slot, 'bucket:', bucket, 'board:', board)
 
     Cards.insert({
       name: tpl.data.name.split(' ')[0] +' ' + (slot + 1),

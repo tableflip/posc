@@ -6,20 +6,28 @@
   <nav class="nav">
     <h1>board {{board.name}}</h1>
   </nav>
+
   {{#each buckets}}
     {{> bucket}}
   {{/each}}
+
 </template>
 
 <template name="bucket">
-  <div class="bucket {{slugify name}}" data-bucket="{{_id}}" draggable="true">
-    <header>
-      <h1>{{name}}</h1>
+
+  <div class="bucket {{slugify name}}"
+       data-bucket="{{_id}}"
+       draggable="{{#if isTrash}}false{{else}}true{{/if}}">
+
+    <header class="bucket-header">
+      <h1 title="{{#unless isTrash}}Drag to re-prioritise{{/unless}}">
+        {{name}}
+      </h1>
     </header>
     <ul>
     {{#each slots}}
       <li class="slot {{#unless _id}}slot-empty{{/unless}}"
-          title="{{#unless _id}}Double click to add a card{{else}}Drag to re-prioritise{{/unless}}"
+          title="{{#if _id}}Drag to re-prioritise{{else}}Double click to add a card{{/if}}"
           data-slot="{{slot}}" >
         {{#if _id}}
           {{>card}}
