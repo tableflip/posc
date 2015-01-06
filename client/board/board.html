@@ -15,7 +15,7 @@
 
 <template name="bucket">
 
-  <div class="bucket {{slugify name}}"
+  <div class="bucket {{slugify name}} {{#if isFull}}bucket-full{{/if}}"
        data-bucket="{{_id}}"
        draggable="{{#if isTrash}}false{{else}}true{{/if}}">
 

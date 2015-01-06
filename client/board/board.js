@@ -48,43 +48,59 @@ function cardDrop (cardEl, slotEl) {
   var cardId = $(cardEl).data('card')
   var slot = parseInt($slotEl.attr('data-slot'))
   var toBucketId = $slotEl.parents('.bucket').data('bucket')
-
+  var toBucket = Buckets.findOne(toBucketId)
   var card = Cards.findOne(cardId)
 
   console.log(cardId, 'to', toBucketId, slot)
-
+  
   if ($slotEl.find('.card').length === 0) {
     // slot is empty
-    return Cards.update(cardId, {$set: {bucket: toBucketId, preferredSlot: slot}})
-  }
+    if (card.bucket !== toBucketId) {
+      // moving to a new bucket
+      Cards.update(cardId, {$set: {bucket: toBucketId, preferredSlot: slot}})
 
-  // we're dropping onto a card, so gonna have to dance.
-  var cardInTheWay = Cards.findOne($slotEl.find('.card').data('card'))
+    } else {
+      // move card and close the gap
+      Cards.update(cardId, {$set: {preferredSlot: slot}})
+      nudgeRight(card, Buckets.findOne(toBucketId))
+    }
 
-  if (cardInTheWay._id === cardId) {
-    return // We'll just leave this where we found it.
-  }
+  } else {
 
-  if (card.bucket !== toBucketId) {
-    // trans bucketing
-    return swapCards(card, cardInTheWay)
-  }
+    // we're dropping onto a card, so gonna have to dance.
 
-  if (card.preferredSlot > cardInTheWay.preferredSlot) {
-    nudgeRight(cardInTheWay, Buckets.findOne(toBucketId))
-    Cards.update(cardId, {$set: {bucket: toBucketId, preferredSlot: slot}})
-  }
+    var cardInTheWay = Cards.findOne($slotEl.find('.card').data('card'))
 
-  if (card.preferredSlot < cardInTheWay.preferredSlot) {
-    nudgeLeft(cardInTheWay, Buckets.findOne(toBucketId))
-    Cards.update(cardId, {$set: {bucket: toBucketId, preferredSlot: slot}})
+    if (cardInTheWay._id === cardId) {
+      return // We'll just leave this where we found it.
+    }
+
+    if (isFull(toBucketId) && card.bucket !== toBucketId) {
+      // Bucket is full, drop is denied.
+      console.log('isFull')
+
+      new jBox('Notice', {
+        content: toBucket.name + ' is full',
+        autoClose: 1000,
+        color:'red'
+      });
+
+    } else {
+      // make room and drop
+      nudgeLeft(cardInTheWay, Buckets.findOne(toBucketId))
+      Cards.update(cardId, {$set: {bucket: toBucketId, preferredSlot: slot}})
+    }
   }
 }
 
-function isFull(bucketId) {
-  var limit = Buckets.findOne(bucketId).limit
-  var cards = Cards.find({bucket: bucketId}).count()
-  return cards >= limit
+function isFull(bucket) {
+  if (typeof bucket === 'string') {
+    bucket = Buckets.findOne(bucket)
+  }
+  if (bucket.limit < 1) return true
+
+  var cards = Cards.find({bucket: bucket._id}).count()
+  return cards >= bucket.limit
 }
 
 function nudgeRight(card, bucket) {
@@ -132,6 +148,10 @@ Template.bucket.helpers({
 
     // zeroth slot is far right...
     return cards.reverse()
+  },
+
+  isFull: function () {
+    return isFull(this)
   }
 })
 

@@ -45,6 +45,11 @@ body.board {
     background: #eeeeee;
   }
 
+  &.drop-denied {
+    background: @color-error;
+
+  }
+
   &.trash {
     border-color:#eee;
 
@@ -84,6 +89,7 @@ body.board {
   height:142px;
   margin:4px;
 
+  -webkit-transition: all linear 0.1s;
   transition: all linear 0.1s;
 }
 
@@ -104,6 +110,8 @@ body.board {
     font-size: 80px;
     display: inline-block;
     margin:0 auto;
+
+    -webkit-transition: all linear 0.1s;
     transition: all linear 0.1s;
   }
 
@@ -145,6 +153,7 @@ body.board {
     color:@color-text;
   }
 
+  -webkit-transition: all linear 0.1s;
   transition: all linear 0.1s ;
 
   &:active{
