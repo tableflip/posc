@@ -28,7 +28,7 @@
     {{#each slots}}
       <li class="slot {{#unless _id}}slot-empty{{/unless}}"
           title="{{#if _id}}Drag to re-prioritise{{else}}Double click to add a card{{/if}}"
-          data-slot="{{slot}}" >
+          data-slot="{{preferredSlot}}" >
         {{#if _id}}
           {{>card}}
         {{/if}}

@@ -76,5 +76,25 @@ Meteor.methods({
 
     Buckets.update(fromId, { $set: { name: to.name, preferredSlot: to.preferredSlot } })
     Buckets.update(toId, { $set: { name: from.name, preferredSlot: from.preferredSlot } })
+  },
+
+  move: function (cardId, toBucketId, slot) {
+    var card = Cards.findOne(cardId)
+
+    // remove card from source bucket
+    Cards.update(cardId, {$set: {bucket: null, preferredSlot: -1}})
+    Cards.update(
+      { bucket: card.bucket, preferredSlot: { $gt: card.preferredSlot }},
+      { $inc: { preferredSlot: -1 }},
+      { multi: true }
+    )
+
+    // make way in destination bucket
+    Cards.update(
+      { bucket: toBucketId, preferredSlot: { $gte: slot }},
+      { $inc: { preferredSlot: 1 }},
+      { multi: true }
+    )
+    Cards.update(cardId, {$set: {bucket: toBucketId, preferredSlot: slot}})
   }
 })

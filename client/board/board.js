@@ -51,78 +51,29 @@ function cardDrop (cardEl, slotEl) {
   var toBucket = Buckets.findOne(toBucketId)
   var card = Cards.findOne(cardId)
 
-  if ($slotEl.find('.card').length === 0) {
-    // slot is empty
-    if (card.bucket !== toBucketId) {
-      // moving to a new bucket
-      Cards.update(cardId, {$set: {bucket: toBucketId, preferredSlot: slot}})
+  if (isFull(toBucketId) && card.bucket !== toBucketId) {
+    // Bucket is full, drop is denied.
 
-    } else {
-      // move card and close the gap
-      Cards.update(cardId, {  $set: {preferredSlot: slot}})
-      nudgeRight(card, Buckets.findOne(toBucketId))
-    }
+    new jBox('Notice', {
+      content: toBucket.name + ' is full',
+      autoClose: 1000,
+      color:'red'
+    })
 
-  } else {
-
-    // we're dropping onto a card, so gonna have to dance.
-
-    var cardInTheWay = Cards.findOne($slotEl.find('.card').data('card'))
-
-    if (cardInTheWay._id === cardId) {
-      return // We'll just leave this where we found it.
-    }
-
-    if (isFull(toBucketId) && card.bucket !== toBucketId) {
-      // Bucket is full, drop is denied.
-      console.log('isFull')
-
-      new jBox('Notice', {
-        content: toBucket.name + ' is full',
-        autoClose: 1000,
-        color:'red'
-      });
-
-    } else {
-      // make room and drop
-      Cards.update(cardId, {$set: {bucket: toBucketId, preferredSlot: slot}})
-      nudgeLeft(cardInTheWay, Buckets.findOne(toBucketId))
-    }
+    return
   }
+
+  Meteor.call('move', cardId, toBucketId, slot)
 }
 
 function isFull(bucket) {
   if (typeof bucket === 'string') {
     bucket = Buckets.findOne(bucket)
   }
-  if (bucket.limit < 1) return true
+  if (bucket.isTrash) return false
 
   var cards = Cards.find({bucket: bucket._id}).count()
   return cards >= bucket.limit
-}
-
-function nudgeRight(card, bucket) {
-  if (!card) return;
-  var nextSlot = card.preferredSlot + 1
-  if (nextSlot > bucket.limit) return;
-  var nextCard = Cards.findOne({bucket: bucket._id, preferredSlot: nextSlot})
-  nudgeRight(nextCard, bucket)
-  Cards.update(card._id, { $set: {preferredSlot: nextSlot}})
-}
-
-function nudgeLeft(card, bucket) {
-  if (!card) return;
-  var previousSlot = (card.preferredSlot - 1) % bucket.limit
-  if (previousSlot < 0) return;
-  var previousCard = Cards.findOne({bucket: bucket._id, preferredSlot: previousSlot})
-  nudgeLeft(previousCard, bucket)
-  Cards.update(card._id, { $set: {preferredSlot: previousSlot}})
-}
-
-function swapCards(card1, card2) {
-  if (!card1 || !card2) return;
-  Cards.update(card1._id, { $set: {bucket: card2.bucket, preferredSlot: card2.preferredSlot}})
-  Cards.update(card2._id, { $set: {bucket: card1.bucket, preferredSlot: card1.preferredSlot}})
 }
 
 // Render slots
@@ -132,16 +83,13 @@ Template.bucket.helpers({
     var cards = Cards.find({bucket: this._id}, {sort:[['preferredSlot', 'asc']]}).fetch()
 
     if (this.isTrash) { // force first item in trash to always be empty
-      cards.push({})
+      cards.push({preferredSlot: -1})
       return cards
     }
 
-    // add in slot property to all cards / slots
-    cards = cards.map(function (c, i){ c.slot = i; return c })
-
     if (cards.length < this.limit) {
       // editable slot
-      cards.push({ slot: cards.length })
+      cards.push({ preferredSlot: cards.length })
     }
 
     // zeroth slot is far right...
@@ -160,7 +108,7 @@ Template.bucket.events({
   'dblclick .slot': function (evt, tpl) {
     if (tpl.data.isTrash) return
 
-    var slot = parseInt(this.slot, 10)
+    var slot = parseInt(this.preferredSlot, 10)
     var bucket = tpl.data._id
     var board = tpl.data.board
 
