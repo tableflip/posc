@@ -11,10 +11,10 @@
     {{> bucket}}
   {{/each}}
 
+  {{> cardEdit card}}
 </template>
 
 <template name="bucket">
-
   <div class="bucket {{slugify name}} {{#if isFull}}bucket-full{{/if}}"
        data-bucket="{{_id}}"
        draggable="{{#if isTrash}}false{{else}}true{{/if}}">
@@ -30,7 +30,7 @@
           title="{{#if _id}}Drag to re-prioritise{{else}}Double click to add a card{{/if}}"
           data-slot="{{preferredSlot}}" >
         {{#if _id}}
-          {{>card}}
+          {{> card}}
         {{/if}}
       </li>
     {{/each}}
@@ -47,18 +47,43 @@
   </div>
 </template>
 
-<template name="editCard">
-  <form class="editCard">
-    <div class="input-group">
-      <label for="edit-card-name">Name</label>
-      <input type="text" class="form-control" id="edit-card-name" placeholder="Listen more"/>
-    </div>
-    <div class="input-group">
-      <label for="edit-card-desc">Description</label>
-      <input type="text" class="form-control" id="edit-card-name" placeholder="Understanding context helps to determine bias" />
-    </div>
-    <div class="input-group">
-      <button>Save</button>
-    </div>
-  </form>
+<template name="cardEdit">
+  <div class="card-edit {{#if show}}show{{/if}}">
+    <header>
+      <h1>Edit card</h1>
+      <button class="btn btn-link btn-close">
+        <i class="fa fa-times"></i>
+      </button>
+    </header>
+    <form>
+      <div class="input-group">
+        <label for="edit-card-desc">Title</label>
+        <input type="text" class="form-control" id="card-edit-name" value="{{name}}" />
+      </div>
+      <div class="input-group">
+        <label for="edit-card-desc">Description</label>
+        <input type="text" class="form-control" id="card-edit-desc" value="{{desc}}"/>
+      </div>
+      <div class="input-group">
+        <label for="edit-card-leader">Leader</label>
+        <input type="text" class="form-control" id="card-edit-leader" value="{{leader}}" />
+      </div>
+      <div class="input-group">
+        <label for="edit-card-due">Due date</label>
+        <input type="date" class="form-control" id="card-edit-due" value="{{due}}" />
+      </div>
+      <div class="input-group">
+        <label for="edit-card-longdesc">More info</label>
+        <textarea class="form-control" id="card-edit-longdesc">{{longdesc}}</textarea>
+      </div>
+      <input type="submit" style="display:none;"/>
+    </form>
+    <footer>
+      <button class="btn btn-link btn-trash" title="Move to trash">
+        <i class="fa fa-trash"></i>
+      </button>
+      <button class="btn btn-link btn-cancel">Cancel</button>
+      <button class="btn btn-primary btn-save">Save</button>
+    </footer>
+  </div>
 </template>

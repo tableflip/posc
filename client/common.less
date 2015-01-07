@@ -37,32 +37,54 @@ h1 {
   background-color: #00bcd4;
   color:rgba(255, 255, 255, 0.8);
   box-shadow:0 1px 2px 0px rgba(0,0,0,0.2);
-  padding: 8px 16px;
+  padding: 5px 16px;
+  min-width:6em;
   display: inline-block;
+  border:solid 2px white;
+  border-radius: 3px;
+  letter-spacing: 2px;
+  color:white;
+  font-weight: lighter;
+  font-size: 12px;
+  box-shadow: none;
+}
+.btn-link {
+  background-color:transparent;
+  color: @color-dark;
+  border:0 none;
+
+  padding: 5px 2px;
+  margin:0 6px;
 }
 
-form {
-  margin:20px 0;
+.btn-danger {
+//  color:@color-error;
 }
 
 .input-group {
   max-width:500px;
-  margin: 20px 0;
+  margin: 10px auto;
 }
 
 .input-group label{
   display: block;
-  padding:0 6px;
+  padding:0 6px 0 3px;
+  font-size: 14px;
+  margin-bottom: -2px;
 }
 
 .form-control {
   display:block;
-  min-width: 25em;
-  max-width: 99%;
+  min-width: calc(100% - 4px);
+  max-width: 25em;
   font-size: 16px;
   padding: 6px 4px;
   margin:2px 2px;
+
+  border: solid 1px rgb(203, 203, 203);
+//  border: solid 2px @color-light;
 }
+
 
 .jBox-Notice .jBox-container {
   border-radius: 0;

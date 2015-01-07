@@ -26,7 +26,10 @@ BoardController = RouteController.extend({
     return {
       _id: this.params._id,
       board: Boards.findOne(this.params._id),
-      buckets: Buckets.find({board:this.params._id}, {sort: [['preferredSlot', 'asc']]}).fetch()
+      buckets: Buckets.find({board:this.params._id}, {sort: [['preferredSlot', 'asc']]}).fetch(),
+      card: function () {
+        return Cards.findOne(Session.get('cardId'))
+      }
     }
   }
 })
@@ -102,10 +105,18 @@ Template.bucket.helpers({
 })
 
 Template.bucket.events({
-  'dblclick .card': function (evt) {
+  'dblclick .card': function (evt, tpl) {
+
+    var card = this
+
+    console.log('dblclick .card', card)
+
+    Session.set('cardId', card._id)
+  },
+  'click .card': function (evt) {
     evt.stopPropagation()
   },
-  'dblclick .slot': function (evt, tpl) {
+  'click .slot': function (evt, tpl) {
     if (tpl.data.isTrash) return
 
     var slot = parseInt(this.preferredSlot, 10)
@@ -114,7 +125,7 @@ Template.bucket.events({
 
     //console.log('slot:', slot, 'bucket:', bucket, 'board:', board)
 
-    Cards.insert({
+    var cardId = Cards.insert({
       name: tpl.data.name.split(' ')[0] +' ' + (slot + 1),
       desc: 'A ' + tpl.data.name,
       bucket: bucket,
@@ -125,5 +136,58 @@ Template.bucket.events({
       updatedOn: Date.now(),
       editing: true
     })
+
+    Session.set('cardId', cardId)
   }
 })
+
+Template.cardEdit.helpers({
+  show: function () {
+    var show = !! Session.get('cardId')
+
+    if (show) {
+      $('#card-edit-name').focus()
+    } else {
+      var form = $('.card-edit form')[0]
+      form && form.reset()
+    }
+    return show
+  }
+})
+
+Template.cardEdit.events({
+  'click .btn-close': function () {
+    Session.set('cardId', false)
+  },
+  'click .btn-cancel': function () {
+    Session.set('cardId', false)
+  },
+  'click .btn-trash': function () {
+    var card = this;
+    trash = Buckets.findOne({'name': 'Trash'})
+    Cards.update(card._id, { $set: { bucket: trash._id }})
+    Session.set('cardId', false)
+  },
+  'submit form, click .btn-save': function (evt, tpl) {
+    evt.preventDefault()
+
+    var card = this
+    var fields = ['name', 'desc', 'leader', 'due','longdesc']
+    var values = fields.map(function(prop) {
+      return $('#card-edit-' + prop).val()
+    })
+    var query = values.reduce(function(res, val, i){
+      var field = fields[i]
+      if(val === card[field]) return res
+      res[field] = val
+      return res
+    }, {})
+
+    console.log('click .btn-save', query, values)
+
+    Cards.update(card._id, {$set: query })
+
+    Session.set('cardId', false)
+  }
+})
+
