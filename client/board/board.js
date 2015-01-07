@@ -165,7 +165,12 @@ Template.cardEdit.events({
   'click .btn-trash': function () {
     var card = this;
     trash = Buckets.findOne({'name': 'Trash'})
-    Cards.update(card._id, { $set: { bucket: trash._id }})
+    if (trash._id === card.bucket) {
+      Cards.remove(card._id)
+    } else {
+      Cards.update(card._id, { $set: { bucket: trash._id }})
+    }
+    
     Session.set('cardId', false)
   },
   'submit form, click .btn-save': function (evt, tpl) {
