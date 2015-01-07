@@ -170,7 +170,7 @@ Template.cardEdit.events({
     } else {
       Cards.update(card._id, { $set: { bucket: trash._id }})
     }
-    
+
     Session.set('cardId', false)
   },
   'submit form, click .btn-save': function (evt, tpl) {

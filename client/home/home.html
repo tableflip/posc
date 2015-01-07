@@ -4,12 +4,13 @@
   </nav>
   
   <div class="container text-center">
-    <a href="/board" class="btn">New Board</a>
+    <div class="jumbotron">
+      <h2>Prioritised Objective Setting and Communication</h2>
+
+      <p>Get started by creating a new board</p>
+
+      <a href="/board" class="btn btn-lg">New board</a>
+    </div>
   </div>
 
-  <ul>
-    {{#each boards}}
-      <li><a href="{{pathFor route='board' data=_id}}">{{name}}</a></li>
-    {{/each}}
-  </ul>
 </template>

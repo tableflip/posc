@@ -4,7 +4,11 @@
 
 <template name="board">
   <nav class="nav">
-    <h1>board {{board.name}}</h1>
+    <h1>
+      <a title="Home" class="btn btn-link btn-home" href="/">
+        <i class="fa fa-home"></i> board {{board.name}}
+      </a>
+    </h1>
   </nav>
 
   {{#each buckets}}
@@ -27,7 +31,7 @@
     <ul>
     {{#each slots}}
       <li class="slot {{#unless _id}}slot-empty{{/unless}}"
-          title="{{#if _id}}Drag to re-prioritise{{else}}Double click to add a card{{/if}}"
+          title="{{#if _id}}Drag to re-prioritise{{else}}Click to add a card{{/if}}"
           data-slot="{{preferredSlot}}" >
         {{#if _id}}
           {{> card}}
@@ -48,7 +52,7 @@
 </template>
 
 <template name="cardEdit">
-  <div class="card-edit {{#if show}}show{{/if}}">
+  <div class="modal card-edit {{#if show}}show{{/if}}">
     <header>
       <h1>Edit card</h1>
       <button class="btn btn-link btn-close">
