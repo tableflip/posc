@@ -48,6 +48,13 @@
       <h1>{{name}}</h1>
     </header>
     <p>{{desc}}</p>
+    {{#if leader}}
+    <footer>
+      <div class="leader" title="Leader">
+        <i class="fa fa-user"></i> {{leader}}
+      </div>
+    </footer>
+    {{/if}}
   </div>
 </template>
 
