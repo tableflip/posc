@@ -13,8 +13,35 @@
 
     var dragSrcEl = null
 
+    function addAutoScroll () {
+      console.log('addAutoScroll')
+      var $body = $('body')
+      $body.append([
+        $('<div data-dd-autoscroll="-1" style="top:0;"></div>'),
+        $('<div data-dd-autoscroll="1" style="bottom:0;"></div>')
+      ])
+
+      $('[data-dd-autoscroll]').css({
+        position:'fixed',
+        left: 0,
+        right: 0,
+        height: 30,
+        zIndex: 999999
+      })
+      .on('dragover', function () {
+        var $body = $('html,body')
+        if ($body.is(':animated')) return true;
+        var dir = parseInt($(this).data('dd-autoscroll'), 10)
+        var chunk = 40
+        var scrollTo = window.scrollY + (dir * chunk)
+        console.log('scrollTo', scrollTo, dir)
+        $body.animate({scrollTop: scrollTo}, 80, 'linear')
+      })
+    }
+
     function handleDragEnd(e) {
       $('.dragging').removeClass('dragging')
+      $('[data-dd-autoscroll]').remove()
     }
 
     function handleDragEnter(e) {
@@ -45,8 +72,8 @@
     $(document)
       .on('dragstart', dragSelector, function handleDragStart(e) {
         e.stopPropagation()
-        //console.log('dragstart', this)
         dragSrcEl = this
+        addAutoScroll()
         $(this).addClass('dragging')
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/html', this.outerHTML);
