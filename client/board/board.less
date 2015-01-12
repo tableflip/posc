@@ -20,20 +20,21 @@ body.board {
 
 .bucket {
   text-align: right;
-  margin:24px auto;
-  width: 770px;
-  padding:0 4px 20px;
-  border-top: solid 3px @color-accent;
+  margin:0 auto 6px;
+  width: 960px;
+  padding:0 4px 4px;
+  border-top: solid 2px @color-accent;
 
   .bucket-header {
     text-align: right;
 
     h1 {
       display:inline-block;
-      width:142px;
-      padding: 8px 0px;
-      margin: 0 4px 4px;
-      font-size: 14px;
+      vertical-align: top;
+      width:182px;
+      padding: 4px 0px;
+      margin: -2px 4px 2px;
+      font-size: 12px;
       line-height: 1;
       letter-spacing: 1px;
       color: @color-text-light;
@@ -100,8 +101,8 @@ body.board {
   background: rgb(250, 250, 250);
   vertical-align: top;
   display: inline-block;
-  width: 142px;
-  height:142px;
+  width: 180px;
+  height:84px;
   margin:4px;
 
   -webkit-transition: all linear 0.1s;
@@ -122,7 +123,8 @@ body.board {
     content:'+';
     vertical-align: middle;
     color: rgb(245, 245, 245);
-    font-size: 80px;
+    font-size: 70px;
+    line-height:1;
     display: inline-block;
     margin:0 auto;
 
@@ -153,7 +155,7 @@ body.board {
 
   header{
     display: block;
-    padding: 6px;
+    padding: 4px 6px;
     background: @color-main;
     cursor: move;
   }
