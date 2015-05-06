@@ -22,15 +22,19 @@ where:
 
 */
 
-Buckets = new Mongo.Collection('buckets')
+Buckets = new Mongo.Collection('buckets', {transform: transform})
+
+var bucketNames = ['Top priority', 'Second priority', 'Third priority', 'Fourth priority', 'Trash']
+
+function transform (bucket) {
+  bucket.name = bucketNames[bucket.preferredSlot]
+  return bucket
+}
 
 Buckets.createBuckets = function (boardId) {
-  var names = ['Top priority', 'Second priority', 'Third priority', 'Fourth priority', 'Trash']
-
-  var buckets = names.map(function (name, index) {
+  var buckets = bucketNames.map(function (name, index) {
     return {
-      name: name,
-      desc: "",
+      desc: '',
       board: boardId,
       limit: 5,
       preferredSlot: index,
@@ -61,7 +65,7 @@ Buckets.allow({
 })
 
 Meteor.methods({
-  swapBuckets: function (fromId, toId) {
+  moveBucket: function (fromId, toId) {
     var from = Buckets.findOne(fromId)
     var to = Buckets.findOne(toId)
 
@@ -71,11 +75,24 @@ Meteor.methods({
     }
 
     if (from.isTrash) {
-      return // send a 401, and show visual cue that it's not possible
+      throw new Meteor.Error(401, 'Moving the trash is not possible')
     }
 
-    Buckets.update(fromId, { $set: { name: to.name, preferredSlot: to.preferredSlot } })
-    Buckets.update(toId, { $set: { name: from.name, preferredSlot: from.preferredSlot } })
+    // remove bucket from source board
+    Buckets.update(fromId, {$set: {board: null, preferredSlot: -1}})
+    Buckets.update(
+      { board: from.board, preferredSlot: { $gt: from.preferredSlot }},
+      { $inc: { preferredSlot: -1 }},
+      { multi: true }
+    )
+
+    // make way
+    Buckets.update(
+      { board: to.board, preferredSlot: { $gte: to.preferredSlot }},
+      { $inc: { preferredSlot: 1 }},
+      { multi: true }
+    )
+    Buckets.update(fromId, {$set: {board: from.board, preferredSlot: to.preferredSlot}})
   },
 
   move: function (cardId, toBucketId, slot) {
