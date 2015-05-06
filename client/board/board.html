@@ -43,6 +43,7 @@
 </template>
 
 <template name="card">
+
   <div class="card" draggable="true" data-card="{{_id}}">
     <header>
       <h1>{{name}}</h1>
@@ -56,6 +57,40 @@
     </footer>
     {{/if}}
   </div>
+
+  {{>popover}}
+
+</template>
+
+<template name="popover">
+  <article class="popover">
+    <main>
+      {{#if desc}}
+        <div class="field">
+          <span class="label">Description</span>
+          <span class="value">{{desc}}</span>
+        </div>
+      {{/if}}
+      {{#if leader}}
+        <div class="field">
+          <span class="label">Leader</span>
+          <span class="value">{{leader}}</span>
+        </div>
+      {{/if}}
+      {{#if due}}
+        <div class="field">
+          <span class="label">Due date</span>
+          <time class="value">{{due}}</time>
+        </div>
+      {{/if}}
+      {{#if longdesc}}
+        <div class="field">
+          <span class="label">More Info</span>
+          <span class="value longdesc">{{longdesc}}</span>
+        </div>
+      {{/if}}    
+    </main>
+  </article>
 </template>
 
 <template name="cardEdit">
