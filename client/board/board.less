@@ -6,6 +6,7 @@ body.board {
     color:@color-text-light;
     font-size:18px;
     padding:0;
+    display: inline;
 
     i {
       -webkit-transition: opacity linear 0.1s;
@@ -14,6 +15,16 @@ body.board {
     }
     &:hover i {
       opacity: 1;
+    }
+  }
+  nav {
+    .map-title {display: inline;}
+    .edit-map-title {
+      display: none;
+    }
+    .input-map-title {
+      outline: none;
+      color: @color-text;
     }
   }
 }

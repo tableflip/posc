@@ -39,6 +39,30 @@ Template.board.rendered = function () {
   $.dd('.bucket', '.bucket', bucketDrop)
 }
 
+Template.mapTitle.events({
+  'click .map-title': function (evt) {
+    toggleEditField()
+    $('.input-map-title').focus()
+  },
+  'blur': function (evt) {
+    toggleEditField()
+    var mapId = $('.input-map-title').data('mapid')
+    var newTitle = $('.input-map-title').val()
+    if (newTitle == '') newTitle = 'Priorities'
+    updateMapTitle(mapId, newTitle)
+  }
+})
+
+function toggleEditField () {
+  $('.map-title').toggle()
+  $('.edit-map-title').toggle() 
+}
+
+function updateMapTitle (id, title) {
+  console.log('save',id,title)
+  Boards.update({'_id':id}, {'name': title})
+}
+
 function bucketDrop (draggedEl, dropEl) {
   var draggedId = $(draggedEl).data('bucket')
   var dropId = $(dropEl).data('bucket')
