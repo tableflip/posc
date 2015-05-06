@@ -145,15 +145,22 @@ Template.bucket.events({
 })
 
 Template.card.rendered = function () {
+
+  var self = this
+
   this.$('.card').webuiPopover({
-    title:'Title',
-    content:'Content',
+    title: this.data.name,
+    content: function () {
+      console.log('this', this)
+      return self.$('.popover')[0].outerHTML
+    },
     trigger: 'hover',
     animation: 'fade',
     delay: {
       show: 1000,
       hide: 300
     },
+    cache: false
   })
 }
 

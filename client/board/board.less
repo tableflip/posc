@@ -107,6 +107,9 @@ body.board {
 
   -webkit-transition: all linear 0.1s;
   transition: all linear 0.1s;
+  .popover {
+    display: none;
+  }
 }
 
 .slot-empty {
@@ -192,6 +195,26 @@ body.board {
   &:active{
     opacity:1;
     box-shadow:0 5px 5px 0 rgba(0,0,0,0.2);
+  }
+}
+.webui-popover {
+  border-radius: 0;
+}
+.webui-popover-title {
+  padding: 6px;
+}
+.webui-popover-content {
+  padding: 0 6px;
+}
+.popover {
+  .field {
+    display: block;
+    font-size: 12px;
+    margin: 6px 0;
+    .label {
+      font-weight: bold;
+      display: block;
+    }
   }
 }
 
