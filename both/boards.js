@@ -45,6 +45,11 @@ Boards.createBoard = function () {
   return id
 }
 
+Boards.updateTitle = function (id, title) {
+  Boards.update(id, {'name': title})
+  return title
+}
+
 if (Meteor.isServer) {
   Meteor.methods({
     createBoard: Boards.createBoard

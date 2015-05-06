@@ -6,8 +6,9 @@
   <nav class="nav">
     <h1>
       <a title="Home" class="btn btn-link btn-home" href="/">
-        <i class="fa fa-home"></i> board {{board.name}}
+        <i class="fa fa-home"></i>
       </a>
+      {{>mapTitle}}
     </h1>
   </nav>
 
@@ -16,6 +17,13 @@
   {{/each}}
 
   {{> cardEdit card}}
+</template>
+
+<template name="mapTitle">
+  <span class="map-title">{{board.name}}</span>
+  <span class="edit-map-title">
+    <input type="text" name="new-map-title" value="{{board.name}}" class="input-map-title" data-mapid="{{board._id}}">
+  </span>
 </template>
 
 <template name="bucket">
