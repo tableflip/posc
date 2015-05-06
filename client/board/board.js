@@ -42,8 +42,8 @@ Template.board.rendered = function () {
 function bucketDrop (draggedEl, dropEl) {
   var draggedId = $(draggedEl).data('bucket')
   var dropId = $(dropEl).data('bucket')
-  if (draggedId === dropId) return;
-  Meteor.call('swapBuckets', draggedId, dropId)
+  if (draggedId === dropId) return
+  Meteor.call('moveBucket', draggedId, dropId)
 }
 
 function cardDrop (cardEl, slotEl) {

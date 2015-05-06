@@ -30,8 +30,8 @@ Boards = new Meteor.Collection('boards')
 
 Boards.createBoard = function () {
   var board = {
-    name: "Priorities",
-    desc: "",
+    name: 'Priorities',
+    desc: '',
     editors: [this.userId],
     createdBy: this.userId,
     createdOn: Date.now()
@@ -47,6 +47,6 @@ Boards.createBoard = function () {
 
 if (Meteor.isServer) {
   Meteor.methods({
-    'createBoard': Boards.createBoard
+    createBoard: Boards.createBoard
   })
 }
