@@ -1,6 +1,6 @@
 Router.route('/', {name:'home'})
-Router.route('/board/:_id', {name: 'board' })
-Router.route('/board', {name: 'board.new', controller: 'NewBoardController' })
+Router.route('/map/:_id', {name: 'map' })
+Router.route('/map', {name: 'map.new', controller: 'NewMapController' })
 
 Tracker.autorun(function() {
   var controller = Router.current()

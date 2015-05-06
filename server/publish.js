@@ -1,18 +1,18 @@
-// Get an array of cards
-Meteor.publish('cardsForBoard', function (boardId) {
-  check(boardId, String)
+// Get an array of objectives
+Meteor.publish('objectivesForMap', function (mapId) {
+  check(mapId, String)
 
-  return Cards.find({board: boardId})
+  return Objectives.find({map: mapId})
 })
 
-Meteor.publish('bucketsForBoard', function (boardId) {
-  check(boardId, String)
+Meteor.publish('scopesForMap', function (mapId) {
+  check(mapId, String)
 
-  return Buckets.find({board: boardId})
+  return Scopes.find({map: mapId})
 })
 
-Meteor.publish('boardById', function (boardId) {
-  check(boardId, String)
+Meteor.publish('mapById', function (mapId) {
+  check(mapId, String)
 
-  return Boards.find({_id: boardId})
+  return Maps.find({_id: mapId})
 })

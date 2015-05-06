@@ -1,13 +1,13 @@
 /*
 
-# Cards: Named issues
+# Objectives: Named issues
 
 ```js
   {
     name: "Dance more",
     desc: "Dance, dance, or else we are lost",
-    bucket: "bucketId",
-    board: "boardId"
+    scope: "scopeId",
+    map: "mapId"
     preferredSlot: 0,
     createdBy: userId,
     createdOn: timestamp,
@@ -16,19 +16,19 @@
 ```
 
 where:
-- `bucket` is a reference to the containing bucket
+- `scope` is a reference to the containing scope
 - `preferredSlot` is a positional hint from the user for manual sorting
 
 */
-Cards = new Mongo.Collection('cards')
+Objectives = new Mongo.Collection('objectives')
 
-Cards.findForUser = function (userId) {
-  return Cards.find({createdBy: userId})
+Objectives.findForUser = function (userId) {
+  return Objectives.find({createdBy: userId})
 }
 
 function yes () {return true} //TODO: limit access to editors
 
-Cards.allow({
+Objectives.allow({
   insert: yes,
   update: yes,
   remove: yes
