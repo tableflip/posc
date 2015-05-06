@@ -116,6 +116,9 @@ Template.bucket.events({
   'click .card': function (evt) {
     evt.stopPropagation()
   },
+  'mousedown .card': function (evt) {
+    $(evt.currentTarget).webuiPopover('hide')
+  },
   'click .slot': function (evt, tpl) {
     if (tpl.data.isTrash) return
 
@@ -140,6 +143,19 @@ Template.bucket.events({
     Session.set('cardId', cardId)
   }
 })
+
+Template.card.rendered = function () {
+  this.$('.card').webuiPopover({
+    title:'Title',
+    content:'Content',
+    trigger: 'hover',
+    animation: 'fade',
+    delay: {
+      show: 1000,
+      hide: 300
+    },
+  })
+}
 
 Template.cardEdit.helpers({
   show: function () {
