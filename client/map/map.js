@@ -44,7 +44,7 @@ Template.mapTitle.events({
     toggleMapTitleField()
     $('.input-map-title').focus()
   },
-  'blur': function (evt) {
+  'blur .input-map-title': function (evt) {
     toggleMapTitleField()
     var mapId = $('.input-map-title').data('mapid')
     var newTitle = $('.input-map-title').val()
@@ -67,7 +67,7 @@ Template.mapTimeframe.events({
     toggleMapTimeframeField()
     $('.input-map-timeframe').focus()
   },
-  'blur': function (evt) {
+  'blur .input-map-timeframe': function (evt) {
     toggleMapTimeframeField()
     var mapId = $('.input-map-timeframe').data('mapid')
     var newTimeframe = $('.input-map-timeframe').val()
@@ -81,7 +81,7 @@ Template.mapTimeframe.events({
 
 function toggleMapTimeframeField () {
   $('.map-timeframe, .btn-map-timeframe').toggle()
-  $('.edit-map-timeframe').toggle() 
+  $('.edit-map-timeframe').toggle()
 }
 
 function priorityDrop (draggedEl, dropEl) {
@@ -190,7 +190,6 @@ Template.priority.events({
 })
 
 Template.objective.rendered = function () {
-
   var self = this
 
   this.$('.objective').webuiPopover({
@@ -215,9 +214,17 @@ Template.objectiveEdit.helpers({
 
     if (show) {
       $('#objective-edit-name').focus()
+
+      $('#objective-edit-longdesc').trumbowyg({
+        btns: ['bold', 'italic', '|', 'link']
+      })
+
+      $('#objective-edit-longdesc').trumbowyg('html', this.longdesc)
+      
     } else {
       var form = $('.objective-edit form')[0]
       form && form.reset()
+      $('#objective-edit-longdesc').trumbowyg('destroy')
     }
     return show
   }

@@ -227,9 +227,16 @@ body.map {
     display: block;
     font-size: 12px;
     margin: 6px 0;
+
     .label {
       font-weight: bold;
       display: block;
+    }
+    .longdesc h1 {
+      font-weight: bold;
+    }
+    .longdesc * {
+      color: black;
     }
   }
 }
@@ -256,7 +263,6 @@ body.map {
   width:35%;
   max-width: 960px;
   min-width: 300px;
-  overflow: hidden;
   background: #eee;
   margin:0 auto;
 
@@ -289,6 +295,56 @@ body.map {
   form {
     display:block;
     padding:0 10px;
+  }
+
+  .trumbowyg-box {
+    width: auto;
+    margin: 2px;
+  }
+  .trumbowyg-editor {
+    background: white;
+  }
+  .trumbowyg-box, .trumbowyg-editor {
+    min-height: 150px;
+  }
+  .trumbowyg-modal-box {
+    height: 220px;
+    form {
+      padding: 0;
+    }
+    .trumbowyg-modal-title {
+      font-size: 18px;
+      padding: 5px 0;
+    }
+  }
+  .trumbowyg-modal-box label .trumbowyg-input-infos span {
+    color: black;
+  }
+  .trumbowyg-modal-box .trumbowyg-modal-button.trumbowyg-modal-submit,
+  .trumbowyg-modal-box .trumbowyg-modal-button.trumbowyg-modal-reset {
+    font-size: 12px;
+    padding: 5px 16px;
+    line-height: inherit;
+    width: auto;
+    height: auto;
+    margin: 0;
+    letter-spacing: 2px;
+  }
+  .trumbowyg-modal-box .trumbowyg-modal-button.trumbowyg-modal-submit {
+    right: 12px;
+    background-color: @color-main;
+    &:hover {
+      background-color: @color-dark;
+    }
+  }
+  .trumbowyg-modal-box .trumbowyg-modal-button.trumbowyg-modal-reset {
+    right: 110px;
+    background-color: white;
+    color: @color-main;
+    &:hover {
+      background-color: white;
+      color: @color-dark;
+    }
   }
 
   footer {
