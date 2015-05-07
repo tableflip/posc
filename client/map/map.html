@@ -1,8 +1,8 @@
-<template name="boardNew">
-  <h1>Creating board</h1>
+<template name="mapNew">
+  <h1>Creating map</h1>
 </template>
 
-<template name="board">
+<template name="map">
   <nav class="nav">
     <h1>
       <a title="Home" class="btn btn-link btn-home" href="/">
@@ -12,26 +12,26 @@
     </h1>
   </nav>
 
-  {{#each buckets}}
-    {{> bucket}}
+  {{#each priorities}}
+    {{> priority}}
   {{/each}}
 
-  {{> cardEdit card}}
+  {{> objectiveEdit objective}}
 </template>
 
 <template name="mapTitle">
-  <span class="map-title">{{board.name}}</span>
+  <span class="map-title">{{map.name}}</span>
   <span class="edit-map-title">
-    <input type="text" name="new-map-title" value="{{board.name}}" class="input-map-title" data-mapid="{{board._id}}">
+    <input type="text" name="new-map-title" value="{{map.name}}" class="input-map-title" data-mapid="{{map._id}}">
   </span>
 </template>
 
-<template name="bucket">
-  <div class="bucket {{slugify name}} {{#if isFull}}bucket-full{{/if}}"
-       data-bucket="{{_id}}"
+<template name="priority">
+  <div class="priority {{slugify name}} {{#if isFull}}priority-full{{/if}}"
+       data-priority="{{_id}}"
        draggable="{{#if isTrash}}false{{else}}true{{/if}}">
 
-    <header class="bucket-header">
+    <header class="priority-header">
       <h1 title="{{#unless isTrash}}Drag to re-prioritise{{/unless}}">
         {{name}}
       </h1>
@@ -39,10 +39,10 @@
     <ul>
     {{#each slots}}
       <li class="slot {{#unless _id}}slot-empty{{/unless}}"
-          title="{{#if _id}}Drag to re-prioritise{{else}}Click to add a card{{/if}}"
+          title="{{#if _id}}Drag to re-prioritise{{else}}Click to add a objective{{/if}}"
           data-slot="{{preferredSlot}}" >
         {{#if _id}}
-          {{> card}}
+          {{> objective}}
         {{/if}}
       </li>
     {{/each}}
@@ -50,9 +50,9 @@
   </div>
 </template>
 
-<template name="card">
+<template name="objective">
 
-  <div class="card" draggable="true" data-card="{{_id}}">
+  <div class="objective" draggable="true" data-objective="{{_id}}">
     <header>
       <h1>{{name}}</h1>
     </header>
@@ -101,34 +101,34 @@
   </article>
 </template>
 
-<template name="cardEdit">
-  <div class="modal card-edit {{#if show}}show{{/if}}">
+<template name="objectiveEdit">
+  <div class="modal objective-edit {{#if show}}show{{/if}}">
     <header>
-      <h1>Edit card</h1>
+      <h1>Edit objective</h1>
       <button class="btn btn-link btn-close">
         <i class="fa fa-times"></i>
       </button>
     </header>
     <form>
       <div class="input-group">
-        <label for="edit-card-desc">Title</label>
-        <input type="text" class="form-control" id="card-edit-name" value="{{name}}" />
+        <label for="edit-objective-desc">Title</label>
+        <input type="text" class="form-control" id="objective-edit-name" value="{{name}}" />
       </div>
       <div class="input-group">
-        <label for="edit-card-desc">Description</label>
-        <input type="text" class="form-control" id="card-edit-desc" value="{{desc}}"/>
+        <label for="edit-objective-desc">Description</label>
+        <input type="text" class="form-control" id="objective-edit-desc" value="{{desc}}"/>
       </div>
       <div class="input-group">
-        <label for="edit-card-leader">Leader</label>
-        <input type="text" class="form-control" id="card-edit-leader" value="{{leader}}" />
+        <label for="edit-objective-leader">Leader</label>
+        <input type="text" class="form-control" id="objective-edit-leader" value="{{leader}}" />
       </div>
       <div class="input-group">
-        <label for="edit-card-due">Due date</label>
-        <input type="date" class="form-control" id="card-edit-due" value="{{due}}" />
+        <label for="edit-objective-due">Due date</label>
+        <input type="date" class="form-control" id="objective-edit-due" value="{{due}}" />
       </div>
       <div class="input-group">
-        <label for="edit-card-longdesc">More info</label>
-        <textarea class="form-control" id="card-edit-longdesc">{{longdesc}}</textarea>
+        <label for="edit-objective-longdesc">More info</label>
+        <textarea class="form-control" id="objective-edit-longdesc">{{longdesc}}</textarea>
       </div>
       <input type="submit" style="display:none;"/>
     </form>

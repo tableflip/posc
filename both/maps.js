@@ -1,10 +1,10 @@
 /*
 
-# Boards: A priority ordered list of Buckets
+# Maps: A priority ordered list of Priorities
 
-Boards are responsible for access control.
-Buckets point to the Boards that they belong to.
-Cards point to the Bucket they are in.
+Maps are responsible for access control.
+Priorities point to the Maps that they belong to.
+Objectives point to the Priority they are in.
 
 ```js
   {
@@ -26,10 +26,10 @@ where:
 
 */
 
-Boards = new Meteor.Collection('boards')
+Maps = new Meteor.Collection('maps')
 
-Boards.createBoard = function () {
-  var board = {
+Maps.createMap = function () {
+  var map = {
     name: 'Priorities',
     desc: '',
     editors: [this.userId],
@@ -37,21 +37,21 @@ Boards.createBoard = function () {
     createdOn: Date.now()
   }
 
-  var id = Boards.insert(board)
-  console.log('insert board', id)
+  var id = Maps.insert(map)
+  console.log('insert map', id)
 
-  Buckets.createBuckets(id)
+  Priorities.createPriorities(id)
 
   return id
 }
 
-Boards.updateTitle = function (id, title) {
-  Boards.update(id, {'name': title})
+Maps.updateTitle = function (id, title) {
+  Maps.update(id, {'name': title})
   return title
 }
 
 if (Meteor.isServer) {
   Meteor.methods({
-    createBoard: Boards.createBoard
+    createMap: Maps.createMap
   })
 }
