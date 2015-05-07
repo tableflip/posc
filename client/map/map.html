@@ -10,6 +10,7 @@
       </a>
       {{>mapTitle}}
     </h1>
+    {{>mapTimeframe}}
   </nav>
 
   {{#each priorities}}
@@ -22,8 +23,28 @@
 <template name="mapTitle">
   <span class="map-title">{{map.name}}</span>
   <span class="edit-map-title">
-    <input type="text" name="new-map-title" value="{{map.name}}" class="input-map-title" data-mapid="{{map._id}}">
+    <form>
+      <input type="text" name="new-map-title" value="{{map.name}}" class="input-map-title" data-mapid="{{map._id}}">
+    </form>
   </span>
+</template>
+
+<template name="mapTimeframe">
+  <div id="map-timeframe">
+    {{#if map.timeframe}}
+    <i class="fa fa-clock-o"></i>
+    <span class="map-timeframe">{{map.timeframe}}</span>
+    {{else}}
+    <a class="btn-link btn-map-timeframe" href="#">
+      <i class="fa fa-clock-o"></i><sup><i class="fa fa-plus"></i></sup>
+    </a>
+    {{/if}}
+    <span class="edit-map-timeframe">
+      <form>
+        <input type="text" name="new-map-timeframe" value="{{map.timeframe}}" class="input-map-timeframe" data-mapid="{{map._id}}">
+      </form>
+    </span>
+  </div>
 </template>
 
 <template name="priority">

@@ -18,13 +18,18 @@ body.map {
     }
   }
   nav {
+    h1 { display: inline-block; }
     .map-title {display: inline;}
-    .edit-map-title {
+    .edit-map-title, .edit-map-timeframe {
       display: none;
     }
-    .input-map-title {
+    .input-map-title, .input-map-timeframe {
       outline: none;
       color: @color-text;
+    }
+    form { display: inline-block; }
+    #map-timeframe {
+      float: right;
     }
   }
 }
