@@ -49,6 +49,8 @@ Priorities.createPriorities = function (mapId) {
       p.limit = 0
       p.isTrash = true
     }
+
+    return p
   })
 
   var priorityIds = priorities.map(function (priority) {
