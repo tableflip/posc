@@ -1,10 +1,10 @@
 /*
 
-# Maps: A priority ordered list of Scopes
+# Maps: A priority ordered list of Priorities
 
 Maps are responsible for access control.
-Scopes point to the Maps that they belong to.
-Objectives point to the Scope they are in.
+Priorities point to the Maps that they belong to.
+Objectives point to the Priority they are in.
 
 ```js
   {
@@ -40,7 +40,7 @@ Maps.createMap = function () {
   var id = Maps.insert(map)
   console.log('insert map', id)
 
-  Scopes.createScopes(id)
+  Priorities.createPriorities(id)
 
   return id
 }

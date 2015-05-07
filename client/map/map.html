@@ -12,8 +12,8 @@
     </h1>
   </nav>
 
-  {{#each scopes}}
-    {{> scope}}
+  {{#each priorities}}
+    {{> priority}}
   {{/each}}
 
   {{> objectiveEdit objective}}
@@ -26,12 +26,12 @@
   </span>
 </template>
 
-<template name="scope">
-  <div class="scope {{slugify name}} {{#if isFull}}scope-full{{/if}}"
-       data-scope="{{_id}}"
+<template name="priority">
+  <div class="priority {{slugify name}} {{#if isFull}}priority-full{{/if}}"
+       data-priority="{{_id}}"
        draggable="{{#if isTrash}}false{{else}}true{{/if}}">
 
-    <header class="scope-header">
+    <header class="priority-header">
       <h1 title="{{#unless isTrash}}Drag to re-prioritise{{/unless}}">
         {{name}}
       </h1>

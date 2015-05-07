@@ -6,7 +6,7 @@
   {
     name: "Dance more",
     desc: "Dance, dance, or else we are lost",
-    scope: "scopeId",
+    priority: "priorityId",
     map: "mapId"
     preferredSlot: 0,
     createdBy: userId,
@@ -16,7 +16,7 @@
 ```
 
 where:
-- `scope` is a reference to the containing scope
+- `priority` is a reference to the containing priority
 - `preferredSlot` is a positional hint from the user for manual sorting
 
 */

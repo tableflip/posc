@@ -5,10 +5,10 @@ Meteor.publish('objectivesForMap', function (mapId) {
   return Objectives.find({map: mapId})
 })
 
-Meteor.publish('scopesForMap', function (mapId) {
+Meteor.publish('prioritiesForMap', function (mapId) {
   check(mapId, String)
 
-  return Scopes.find({map: mapId})
+  return Priorities.find({map: mapId})
 })
 
 Meteor.publish('mapById', function (mapId) {
