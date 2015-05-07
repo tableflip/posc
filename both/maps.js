@@ -28,6 +28,12 @@ where:
 
 Maps = new Meteor.Collection('maps')
 
+Maps.allow({
+  update: function (userId, map, fieldNames) {
+    return (fieldNames.length === 1 && (fieldNames[0] === 'name' || fieldNames[0] === 'timeframe'))
+  }
+})
+
 Maps.createMap = function () {
   var map = {
     name: 'Priorities',

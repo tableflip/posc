@@ -41,26 +41,47 @@ Template.map.rendered = function () {
 
 Template.mapTitle.events({
   'click .map-title': function (evt) {
-    toggleEditField()
+    toggleMapTitleField()
     $('.input-map-title').focus()
   },
   'blur': function (evt) {
-    toggleEditField()
+    toggleMapTitleField()
     var mapId = $('.input-map-title').data('mapid')
     var newTitle = $('.input-map-title').val()
-    if (newTitle == '') newTitle = 'Priorities'
-    updateMapTitle(mapId, newTitle)
+    if (newTitle === '') newTitle = 'Priorities'
+    Maps.update({_id: mapId}, {$set: {name: newTitle}})
+  },
+  'submit form': function (evt) {
+    evt.preventDefault()
+    $('input', evt.currentTarget).blur()
   }
 })
 
-function toggleEditField () {
+function toggleMapTitleField () {
   $('.map-title').toggle()
   $('.edit-map-title').toggle() 
 }
 
-function updateMapTitle (id, title) {
-  console.log('save', id, title)
-  Maps.update({_id: id}, {name: title})
+Template.mapTimeframe.events({
+  'click .map-timeframe, click .btn-map-timeframe': function (evt) {
+    toggleMapTimeframeField()
+    $('.input-map-timeframe').focus()
+  },
+  'blur': function (evt) {
+    toggleMapTimeframeField()
+    var mapId = $('.input-map-timeframe').data('mapid')
+    var newTimeframe = $('.input-map-timeframe').val()
+    Maps.update({_id: mapId}, {$set: {timeframe: newTimeframe}})
+  },
+  'submit form': function (evt) {
+    evt.preventDefault()
+    $('input', evt.currentTarget).blur()
+  }
+})
+
+function toggleMapTimeframeField () {
+  $('.map-timeframe, .btn-map-timeframe').toggle()
+  $('.edit-map-timeframe').toggle() 
 }
 
 function priorityDrop (draggedEl, dropEl) {
