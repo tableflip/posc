@@ -3,3 +3,11 @@
 </head>
 <body>
 </body>
+
+<template name="layout">
+  {{> yield}}
+  <footer>
+    <a href="/contact">Contact</a> &bull;
+    <a href="/terms">Terms of Use</a>
+  </footer>
+</template>

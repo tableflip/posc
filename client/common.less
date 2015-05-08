@@ -14,6 +14,13 @@ h1 {
   font-weight: 400;
 }
 
+a {
+  color: @color-dark;
+}
+a:hover {
+  color: @color-main;
+}
+
 .container {
   margin: 1em auto;
   max-width: 1000px;
@@ -51,6 +58,7 @@ h1 {
   -webkit-transition: opacity linear 0.1s;
   transition: opacity linear 0.1s;
   &:hover {
+    color: white;
     opacity: 1;
   }
 }
@@ -112,6 +120,12 @@ h1 {
 
 .jBox-Notice-color .jBox-container {
   text-shadow: none;
+}
+
+body > footer {
+  font-size: 12px;
+  text-align: center;
+  padding: 6px 0;
 }
 
 @media
