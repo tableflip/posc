@@ -183,14 +183,19 @@ body.map {
     letter-spacing: 1px;
     text-align: left;
     font-size:14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     padding: 0px 4px;
   }
   p{
     margin:0;
     padding: 6px;
-    text-align:left;
-    font-size:12px;
-    color:@color-text;
+    text-align: left;
+    font-size: 12px;
+    color: @color-text;
+    height: 3em;
+    overflow: hidden;
   }
   footer {
     text-align: left;
@@ -217,7 +222,8 @@ body.map {
   border-radius: 0;
 }
 .webui-popover-title {
-  padding: 6px;
+  color: black;
+  padding: 6px 0;
 }
 .webui-popover-content {
   padding: 0 6px;
