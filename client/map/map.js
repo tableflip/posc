@@ -193,20 +193,23 @@ Template.objective.rendered = function () {
   var self = this
 
   this.$('.objective').webuiPopover({
-    title: this.data.name,
     content: function () {
-      console.log('this', this)
       return self.$('.popover')[0].outerHTML
     },
     trigger: 'hover',
     animation: 'fade',
-    delay: {
-      show: 1000,
-      hide: 300
-    },
+    delay: {hide: 300},
     cache: false
   })
 }
+
+Template.objective.helpers({
+  truncate: function (str) {
+    console.log(str, str.length)
+    if (str.length < 50) return str
+    return str.slice(0, 50) + '…'
+  }
+})
 
 Template.objectiveEdit.helpers({
   show: function () {
