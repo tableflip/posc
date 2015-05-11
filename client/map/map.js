@@ -37,27 +37,25 @@ MapController = RouteController.extend({
 Template.map.rendered = function () {
   $.dd('.objective', '.slot', objectiveDrop)
   $.dd('.priority', '.priority', priorityDrop)
+  onboard()
+}
 
-  //find the first empty slot or objective
-  if ($('.objective').first().length > 0) {
-    if (!$('.objective').parentsUntil('priority').hasClass('trash')) { // ignore objectives in the trash
-      var target = $('.objective').first()
-    }else{
-      var target = $('.slot').first()
-    }
-  }else{
-    var target = $('.slot').first()
-  }
+function onboard () {
+  var objective = $('.objective:not(.trash .objective)').first()
+  var target = objective.length ? objective : $('.slot').first()
 
-  var deltas = target.offset()
-  $('#start-here').text('Start here >').css('left', deltas.left).css('top', deltas.top)
+  var startHere = $('#start-here')
+  var offset = target.offset()
 
-  setTimeout(function () {
-    $('#start-here').fadeOut(600, function () {
-      $('#start-here').hide()
+  startHere
+    .css({left: offset.left, top: offset.top})
+    .fadeIn(600, function () {
+      setTimeout(function () {
+        startHere.fadeOut(600, function () {
+          startHere.hide()
+        })
+      }, 4000)
     })
-  }, 3000)
-  
 }
 
 Template.mapTitle.events({
