@@ -58,6 +58,7 @@
         {{name}}
       </h1>
     </header>
+
     <ul>
     {{#each slots}}
       <li class="slot {{#unless _id}}slot-empty{{/unless}}"
@@ -65,6 +66,8 @@
           data-slot="{{preferredSlot}}" >
         {{#if _id}}
           {{> objective}}
+        {{else}}
+          <div class="sequence-indicator" data-sequence="{{sequenceNumber ..}}">{{sequenceNumber ..}}</div>
         {{/if}}
       </li>
     {{/each}}

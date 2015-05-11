@@ -77,25 +77,6 @@ function setHashFromSessionObjectiveId () {
 Template.map.rendered = function () {
   $.dd('.objective', '.slot', objectiveDrop)
   $.dd('.priority', '.priority', priorityDrop)
-  onboard()
-}
-
-function onboard () {
-  var objective = $('.objective:not(.trash .objective)').first()
-  var target = objective.length ? objective : $('.slot').first()
-
-  var startHere = $('#start-here')
-  var offset = target.offset()
-
-  startHere
-    .css({left: offset.left, top: offset.top})
-    .fadeIn(600, function () {
-      setTimeout(function () {
-        startHere.fadeOut(600, function () {
-          startHere.hide()
-        })
-      }, 4000)
-    })
 }
 
 Template.mapTitle.events({
@@ -202,7 +183,24 @@ Template.priority.helpers({
     // zeroth slot is far right...
     return objectives.reverse()
   },
+  sequenceNumber: function (priority) {
+    var priorities = Priorities.find({map: priority.map}, {sort: [['preferredSlot', 'asc']]})
 
+    var order = 0
+    var sequence = 0
+
+    priorities.forEach(function (p) {
+      if (Objectives.find({priority: p._id}).count()) {
+        order++
+
+        if (p._id == priority._id) {
+          sequence = order
+        }
+      }
+    })
+
+    return sequence
+  },
   isFull: function () {
     return isFull(this)
   }
