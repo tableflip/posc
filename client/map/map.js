@@ -22,6 +22,16 @@ MapController = RouteController.extend({
     ]
   },
 
+  onRun: function () {
+    if (this.params.query.edit) {
+      window.location.hash = '/edit/' + this.params.query.edit
+    }
+
+    setSessionObjectiveIdFromHash()
+    $(window).on('hashchange', setSessionObjectiveIdFromHash)
+    this.next()
+  },
+
   data: function () {
     return {
       _id: this.params._id,
@@ -31,8 +41,38 @@ MapController = RouteController.extend({
         return Objectives.findOne(Session.get('objectiveId'))
       }
     }
+  },
+
+  onAfterAction: function () {
+    setHashFromSessionObjectiveId()
   }
 })
+
+function setSessionObjectiveIdFromHash () {
+  var hash = window.location.hash
+
+  if (hash) {
+    var params = hash.split('/').slice(1)
+
+    if (params[0] === 'edit' && Session.get('objectiveId') != params[1]) {
+      Session.set('objectiveId', params[1])
+    }
+  }
+}
+
+function setHashFromSessionObjectiveId () {
+  var objectiveId = Session.get('objectiveId')
+  var hash = window.location.hash
+  var newHash = '/edit/' + objectiveId
+
+  if (objectiveId) {
+    if (hash.slice(1) != newHash) {
+      window.location.hash = newHash
+    }
+  } else if (hash) {
+    window.location.hash = ''
+  }
+}
 
 Template.map.rendered = function () {
   $.dd('.objective', '.slot', objectiveDrop)
