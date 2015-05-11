@@ -37,6 +37,25 @@ MapController = RouteController.extend({
 Template.map.rendered = function () {
   $.dd('.objective', '.slot', objectiveDrop)
   $.dd('.priority', '.priority', priorityDrop)
+  onboard()
+}
+
+function onboard () {
+  var objective = $('.objective:not(.trash .objective)').first()
+  var target = objective.length ? objective : $('.slot').first()
+
+  var startHere = $('#start-here')
+  var offset = target.offset()
+
+  startHere
+    .css({left: offset.left, top: offset.top})
+    .fadeIn(600, function () {
+      setTimeout(function () {
+        startHere.fadeOut(600, function () {
+          startHere.hide()
+        })
+      }, 4000)
+    })
 }
 
 Template.mapTitle.events({
