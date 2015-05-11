@@ -92,7 +92,7 @@
 </template>
 
 <template name="popover">
-  <article class="popover">
+  <article class="popover" data-objective="{{_id}}">
     <h1 class="webui-popover-title">{{name}}</h1>
     {{#if desc}}
       <div class="field">
@@ -118,6 +118,23 @@
         <span class="value longdesc">{{{longdesc}}}</span>
       </div>
     {{/if}}
+    {{#if checklist}}
+      <div class="field">
+        <span class="label">Checklist</span>
+        {{#each checklist}}
+          <div class="value checklist">
+            <label>
+              {{#if checked}}
+                <input type="checkbox" checked="checked" value="{{name}}"/>
+              {{else}}
+                <input type="checkbox" value="{{name}}"/>
+              {{/if}}
+              {{name}}
+            </label>
+          </div>
+        {{/each}}
+      </div>
+    {{/if}}
   </article>
 </template>
 
@@ -131,24 +148,44 @@
     </header>
     <form>
       <div class="input-group">
-        <label for="edit-objective-desc">Title</label>
+        <label for="objective-edit-desc">Title</label>
         <input type="text" class="form-control" id="objective-edit-name" value="{{name}}" />
       </div>
       <div class="input-group">
-        <label for="edit-objective-desc">Description</label>
+        <label for="objective-edit-desc">Description</label>
         <input type="text" class="form-control" id="objective-edit-desc" value="{{desc}}"/>
       </div>
       <div class="input-group">
-        <label for="edit-objective-leader">Leader</label>
+        <label for="objective-edit-leader">Leader</label>
         <input type="text" class="form-control" id="objective-edit-leader" value="{{leader}}" />
       </div>
       <div class="input-group">
-        <label for="edit-objective-due">Due date</label>
+        <label for="objective-edit-due">Due date</label>
         <input type="date" class="form-control" id="objective-edit-due" value="{{due}}" />
       </div>
       <div class="input-group">
-        <label for="edit-objective-longdesc">More info</label>
+        <label for="objective-edit-longdesc">More info</label>
         <textarea class="form-control" id="objective-edit-longdesc"></textarea>
+      </div>
+      <div class="input-group">
+        <label for="objective-edit-checklist">Checklist</label>
+        <div id="objective-edit-checklist">
+          {{#if checklist}}
+            {{#each checklist}}
+              <div class="checklist-checkbox">
+                {{#if checked}}
+                  <input type="checkbox" checked/>
+                {{else}}
+                  <input type="checkbox"/>
+                {{/if}}
+              </div>
+              <div class="checklist-name">
+                <input type="text" class="form-control" value="{{name}}" />
+              </div>
+            {{/each}}
+          {{/if}}
+          <a href="#" class="btn btn-link btn-checklist-add"><i class="fa fa-plus"></i></a>
+        </div>
       </div>
       <input type="submit" style="display:none;"/>
     </form>

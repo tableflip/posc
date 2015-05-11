@@ -194,18 +194,36 @@ Template.objective.rendered = function () {
 
   this.$('.objective').webuiPopover({
     content: function () {
-      return self.$('.popover')[0].outerHTML
+      return self.$('.popover').clone()
     },
     trigger: 'hover',
     animation: 'fade',
     delay: {hide: 300},
     cache: false
+  // Bug in lib means that shown.webui.popover doesn't work :(
+  // Listen for show instead and add checkbox events after timeout
+  }).on('show.webui.popover', function () {
+    setTimeout(function () {
+      $('.webui-popover.in input[type=checkbox]').click(onPopoverCheckboxChange)
+    })
   })
+}
+
+function onPopoverCheckboxChange () {
+  var checkbox = $(this)
+  var objectiveId = checkbox.closest('.popover').data('objective')
+  var objective = Objectives.findOne(objectiveId)
+  var checklist = objective.checklist.map(function (item) {
+    if (item.name == checkbox.val()) {
+      item.checked = checkbox.is(':checked')
+    }
+    return item
+  })
+  Objectives.update(objectiveId, {$set: {checklist: checklist}})
 }
 
 Template.objective.helpers({
   truncate: function (str) {
-    console.log(str, str.length)
     if (str.length < 50) return str
     return str.slice(0, 50) + '…'
   }
@@ -216,11 +234,14 @@ Template.objectiveEdit.helpers({
     var show = !! Session.get('objectiveId')
 
     if (show) {
-      $('#objective-edit-name').focus()
+      // If not already showing, we need to init
+      if (!$('.objective-edit.show').size()) {
+        $('#objective-edit-name').focus()
 
-      $('#objective-edit-longdesc').trumbowyg({
-        btns: ['bold', 'italic', '|', 'link']
-      })
+        $('#objective-edit-longdesc').trumbowyg({
+          btns: ['bold', 'italic', '|', 'link']
+        })
+      }
 
       $('#objective-edit-longdesc').trumbowyg('html', this.longdesc)
       
@@ -251,6 +272,9 @@ Template.objectiveEdit.events({
 
     Session.set('objectiveId', false)
   },
+  'click .btn-checklist-add': function (evt) {
+    Objectives.update(this._id, {$push: {checklist: {name: '', checked: false}}})
+  },
   'submit form, click .btn-save': function (evt, tpl) {
     evt.preventDefault()
 
@@ -265,6 +289,17 @@ Template.objectiveEdit.events({
       res[field] = val
       return res
     }, {})
+
+    var checklistBoxes = $('#objective-edit-checklist input[type=checkbox]')
+    var checklistNames = $('#objective-edit-checklist input[type=text]')
+
+    var checklist = checklistBoxes.toArray().reduce(function (list, checkbox, i) {
+      var name = $(checklistNames[i]).val()
+      if (name) list.push({name: name, checked: $(checkbox).is(':checked')})
+      return list
+    }, [])
+
+    query.checklist = checklist
 
     console.log('click .btn-save', query, values)
 
