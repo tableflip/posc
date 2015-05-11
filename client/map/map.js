@@ -123,6 +123,7 @@ function toggleMapTitleField () {
 
 Template.mapTimeframe.events({
   'click .map-timeframe, click .btn-map-timeframe': function (evt) {
+    evt.preventDefault()
     toggleMapTimeframeField()
     $('.input-map-timeframe').focus()
   },
