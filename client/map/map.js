@@ -281,9 +281,14 @@ function onPopoverCheckboxChange () {
 }
 
 Template.objective.helpers({
-  truncate: function (str) {
-    if (str.length < 50) return str
-    return str.slice(0, 50) + '…'
+  objectiveClass: function () {
+    return this.name.length > 50 ? 'objective-long' : 'objective-short'
+  },
+  dotdotdot: function () {
+    setTimeout(function () {
+      $('.objective[data-objective='+ this._id + '] header').dotdotdot()
+      $('.objective[data-objective='+ this._id + '] main').dotdotdot()
+    }.bind(this))
   }
 })
 
