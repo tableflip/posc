@@ -137,62 +137,65 @@
 </template>
 
 <template name="objectiveEdit">
-  <div class="modal objective-edit {{#if show}}show{{/if}}">
-    <header>
-      <h1>Edit objective</h1>
-      <button class="btn btn-link btn-close">
-        <i class="fa fa-times"></i>
-      </button>
-    </header>
-    <form>
-      <div class="input-group">
-        <label for="objective-edit-desc">Title</label>
-        <input type="text" class="form-control" id="objective-edit-name" value="{{name}}" />
-      </div>
-      <div class="input-group">
-        <label for="objective-edit-desc">Description</label>
-        <input type="text" class="form-control" id="objective-edit-desc" value="{{desc}}"/>
-      </div>
-      <div class="input-group">
-        <label for="objective-edit-leader">Leader</label>
-        <input type="text" class="form-control" id="objective-edit-leader" value="{{leader}}" />
-      </div>
-      <div class="input-group">
-        <label for="objective-edit-due">Due date</label>
-        <input type="date" class="form-control" id="objective-edit-due" value="{{due}}" />
-      </div>
-      <div class="input-group">
-        <label for="objective-edit-longdesc">More info</label>
-        <textarea class="form-control" id="objective-edit-longdesc"></textarea>
-      </div>
-      <div class="input-group">
-        <label for="objective-edit-checklist">Checklist</label>
-        <div id="objective-edit-checklist">
-          {{#if checklist}}
-            {{#each checklist}}
-              <div class="checklist-checkbox">
-                {{#if checked}}
-                  <input type="checkbox" checked/>
-                {{else}}
-                  <input type="checkbox"/>
-                {{/if}}
-              </div>
-              <div class="checklist-name">
-                <input type="text" class="form-control" value="{{name}}" />
-              </div>
-            {{/each}}
-          {{/if}}
-          <a href="#" class="btn btn-link btn-checklist-add"><i class="fa fa-plus"></i></a>
+  <div class="modal {{#if show}}show{{/if}}" id="modal-objective-edit">
+    <div class="modal-mask"></div>
+    <div class="objective-edit">
+      <header>
+        <h1>Edit objective</h1>
+        <button class="btn btn-link btn-close">
+          <i class="fa fa-times"></i>
+        </button>
+      </header>
+      <form>
+        <div class="input-group">
+          <label for="objective-edit-desc">Title</label>
+          <input type="text" class="form-control" id="objective-edit-name" value="{{name}}" />
         </div>
-      </div>
-      <input type="submit" style="display:none;"/>
-    </form>
-    <footer>
-      <button class="btn btn-link btn-trash" title="Move to trash">
-        <i class="fa fa-trash"></i>
-      </button>
-      <button class="btn btn-link btn-cancel">Cancel</button>
-      <button class="btn btn-primary btn-save">Save</button>
-    </footer>
+        <div class="input-group">
+          <label for="objective-edit-desc">Description</label>
+          <input type="text" class="form-control" id="objective-edit-desc" value="{{desc}}"/>
+        </div>
+        <div class="input-group">
+          <label for="objective-edit-leader">Leader</label>
+          <input type="text" class="form-control" id="objective-edit-leader" value="{{leader}}" />
+        </div>
+        <div class="input-group">
+          <label for="objective-edit-due">Due date</label>
+          <input type="date" class="form-control" id="objective-edit-due" value="{{due}}" />
+        </div>
+        <div class="input-group">
+          <label for="objective-edit-longdesc">More info</label>
+          <textarea class="form-control" id="objective-edit-longdesc"></textarea>
+        </div>
+        <div class="input-group">
+          <label for="objective-edit-checklist">Checklist</label>
+          <div id="objective-edit-checklist">
+            {{#if checklist}}
+              {{#each checklist}}
+                <div class="checklist-checkbox">
+                  {{#if checked}}
+                    <input type="checkbox" checked/>
+                  {{else}}
+                    <input type="checkbox"/>
+                  {{/if}}
+                </div>
+                <div class="checklist-name">
+                  <input type="text" class="form-control" value="{{name}}" />
+                </div>
+              {{/each}}
+            {{/if}}
+            <a href="#" class="btn btn-link btn-checklist-add"><i class="fa fa-plus"></i></a>
+          </div>
+        </div>
+        <input type="submit" style="display:none;"/>
+      </form>
+      <footer>
+        <button class="btn btn-link btn-trash" title="Move to trash">
+          <i class="fa fa-trash"></i>
+        </button>
+        <button class="btn btn-link btn-cancel">Cancel</button>
+        <button class="btn btn-primary btn-save">Save</button>
+      </footer>
+    </div>
   </div>
 </template>
