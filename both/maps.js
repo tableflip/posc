@@ -36,8 +36,9 @@ Maps.allow({
 
 Maps.createMap = function () {
   var map = {
-    name: 'Priorities',
+    name: 'Click to Enter Scope',
     desc: '',
+    timeframe: 'Click to Enter Timeframe',
     editors: [this.userId],
     createdBy: this.userId,
     createdOn: Date.now()
