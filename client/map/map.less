@@ -405,13 +405,35 @@ body.map {
   }
   .trumbowyg-fullscreen { width: 100%; }
 
-  .checklist-checkbox {
-    float: left;
-    margin: 3px 0 0 6px;
+  .checklist-item {
+    margin: 6px 0;
   }
 
+  .checklist-reorder {
+    vertical-align: middle;
+    display: inline-block;
+    text-align: center;
+    width: 4%;
+  }
+  .checklist-checkbox {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    margin-bottom: 4px;
+    width: 6%;
+  }
   .checklist-name {
-    margin: 0 0 6px 26px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    width: 85%;
+  }
+  .checklist-remove {
+    display: inline-block;
+    text-align: center;
+    color: @color-error;
+    vertical-align: middle;
+    width: 5%;
   }
 
   .btn-checklist-add {

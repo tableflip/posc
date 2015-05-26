@@ -336,6 +336,9 @@ Template.objectiveEdit.helpers({
       $('#objective-edit-longdesc').trumbowyg('destroy')
     }
     return show
+  },
+  getIndex: function (checklist, item) {
+    return checklist.indexOf(item)
   }
 })
 
@@ -359,6 +362,19 @@ Template.objectiveEdit.events({
   },
   'click .btn-checklist-add': function (evt) {
     Objectives.update(this._id, {$push: {checklist: {name: '', checked: false}}})
+    setTimeout(function () {
+      var container = $('#objective-edit-checklist .checklist-name').last()
+      $('input', container).focus()
+    }.bind(this), 100)
+  },
+  'click .checklist-remove a': function (evt, tpl) {
+    evt.preventDefault()
+    var index = $(evt.currentTarget).data('item-index')
+    var checklist = editChecklist()
+    var updatedChecklist = checklist.filter(function (item, i) {
+      return i !== index
+    })
+    Objectives.update( tpl.data._id, {$set: {checklist: updatedChecklist}})
   },
   'submit form, click .btn-save': function (evt, tpl) {
     evt.preventDefault()
@@ -375,16 +391,7 @@ Template.objectiveEdit.events({
       return res
     }, {})
 
-    var checklistBoxes = $('#objective-edit-checklist input[type=checkbox]')
-    var checklistNames = $('#objective-edit-checklist input[type=text]')
-
-    var checklist = checklistBoxes.toArray().reduce(function (list, checkbox, i) {
-      var name = $(checklistNames[i]).val()
-      if (name) list.push({name: name, checked: $(checkbox).is(':checked')})
-      return list
-    }, [])
-
-    query.checklist = checklist
+    query.checklist = editChecklist()
     query.modifiedAt = Date.now()
 
     console.log('click .btn-save', query, values)
@@ -394,4 +401,17 @@ Template.objectiveEdit.events({
     Session.set('objectiveId', false)
   }
 })
+
+function editChecklist () {
+  var checklistBoxes = $('#objective-edit-checklist input[type=checkbox]')
+  var checklistNames = $('#objective-edit-checklist input[type=text]')
+
+  var checklist = checklistBoxes.toArray().reduce(function (list, checkbox, i) {
+    var name = $(checklistNames[i]).val()
+    list.push({name: name, checked: $(checkbox).is(':checked')})
+    return list
+  }, [])
+
+  return checklist
+}
 

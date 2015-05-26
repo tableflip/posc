@@ -172,15 +172,20 @@
           <div id="objective-edit-checklist">
             {{#if checklist}}
               {{#each checklist}}
-                <div class="checklist-checkbox">
-                  {{#if checked}}
-                    <input type="checkbox" checked/>
-                  {{else}}
-                    <input type="checkbox"/>
-                  {{/if}}
-                </div>
-                <div class="checklist-name">
-                  <input type="text" class="form-control" value="{{name}}" />
+                <div class="checklist-item">
+                  <div class="checklist-reorder">
+                    <a href="#"><i class="fa fa-reorder"></i></a>
+                  </div><div class="checklist-checkbox">
+                    {{#if checked}}
+                      <input type="checkbox" checked/>
+                    {{else}}
+                      <input type="checkbox"/>
+                    {{/if}}
+                  </div><div class="checklist-name">
+                    <input type="text" class="form-control" value="{{name}}" />
+                  </div><div class="checklist-remove" >
+                    <a href="#" data-item-index="{{getIndex ../checklist this}}"><i class="fa fa-remove"></i></a>
+                  </div>
                 </div>
               {{/each}}
             {{/if}}
