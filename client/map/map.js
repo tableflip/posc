@@ -29,6 +29,9 @@ MapController = RouteController.extend({
 
     setSessionObjectiveIdFromHash()
     $(window).on('hashchange', setSessionObjectiveIdFromHash)
+
+    this.recentlyUpdatedObjectivesInterval = setInterval(recentlyUpdatedObjectives, 500)
+
     this.next()
   },
 
@@ -45,6 +48,10 @@ MapController = RouteController.extend({
 
   onAfterAction: function () {
     setHashFromSessionObjectiveId()
+  },
+
+  onStop: function () {
+    clearInterval(this.recentlyUpdatedObjectivesInterval)
   }
 })
 
@@ -72,6 +79,26 @@ function setHashFromSessionObjectiveId () {
   } else if (hash) {
     window.location.hash = ''
   }
+}
+
+function recentlyUpdatedObjectives () {
+  $('.objective').each(function () {
+    var objective = $(this)
+    var modifiedAt = parseInt(objective.attr('data-modified-at') || 0)
+    var now = Date.now()
+
+    var icon = $('.icon-recently-modified', objective)
+
+    if (modifiedAt > now - 60000) {
+      if (!icon.size()) {
+        icon = $('<i>').addClass('fa fa-certificate fa-spin icon-recently-modified').hide()
+        objective.append(icon)
+        icon.fadeIn(250)
+      }
+    } else {
+      icon.fadeOut(250, icon.remove.bind(icon))
+    }
+  })
 }
 
 Template.map.rendered = function () {
@@ -238,8 +265,8 @@ Template.priority.events({
       map: map,
       preferredSlot: slot,
       createdBy: Meteor.userId,
-      createdOn: Date.now(),
-      updatedOn: Date.now(),
+      createdAt: Date.now(),
+      modifiedAt: Date.now(),
       editing: true
     })
 
@@ -282,7 +309,7 @@ function onPopoverCheckboxChange () {
 
 Template.objective.helpers({
   objectiveClass: function () {
-    return this.name.length > 50 ? 'objective-long' : 'objective-short'
+    return this.name.length > 50 ? 'long' : 'short'
   },
   dotdotdot: function () {
     setTimeout(function () {
@@ -363,6 +390,7 @@ Template.objectiveEdit.events({
     }, [])
 
     query.checklist = checklist
+    query.modifiedAt = Date.now()
 
     console.log('click .btn-save', query, values)
 

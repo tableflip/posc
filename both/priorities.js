@@ -40,7 +40,7 @@ Priorities.createPriorities = function (mapId) {
       limit: 5,
       preferredSlot: index,
       createdBy: this.userId,
-      createdOn: Date.now()
+      createdAt: Date.now()
     }
 
     // Last priority is the trash - label it so
@@ -98,7 +98,7 @@ Meteor.methods({
       { $inc: { preferredSlot: 1 }},
       { multi: true }
     )
-    Priorities.update(fromId, {$set: {map: from.map, preferredSlot: to.preferredSlot}})
+    Priorities.update(fromId, {$set: {map: from.map, preferredSlot: to.preferredSlot, modifiedAt: Date.now()}})
   },
 
   move: function (objectiveId, toPriorityId, slot) {
@@ -118,6 +118,6 @@ Meteor.methods({
       { $inc: { preferredSlot: 1 }},
       { multi: true }
     )
-    Objectives.update(objectiveId, {$set: {priority: toPriorityId, preferredSlot: slot}})
+    Objectives.update(objectiveId, {$set: {priority: toPriorityId, preferredSlot: slot, modifiedAt: Date.now()}})
   }
 })
