@@ -75,21 +75,17 @@
 
 <template name="objective">
 
-  <div class="objective" draggable="true" data-objective="{{_id}}">
+  <article class="objective {{objectiveClass}}" draggable="true" data-objective="{{_id}}">
     <header>
       <h1><a href="/map/{{map}}?edit={{_id}}">{{name}}</a></h1>
     </header>
-    <p>{{truncate desc}}</p>
-    {{#if leader}}
-    <footer>
-      <div class="leader" title="Leader">
-        <i class="fa fa-user"></i> {{leader}}
-      </div>
-    </footer>
-    {{/if}}
-  </div>
+    <main>
+      <p>{{desc}}</p>
+    </main>
+  </article>
 
   {{>popover}}
+  {{dotdotdot}}
 
 </template>
 
@@ -105,7 +101,7 @@
     {{#if leader}}
       <div class="field">
         <span class="label">Leader</span>
-        <span class="value">{{leader}}</span>
+        <span class="value"><i class="fa fa-user"></i> {{leader}}</span>
       </div>
     {{/if}}
     {{#if due}}

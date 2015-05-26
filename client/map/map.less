@@ -121,7 +121,7 @@ body.map {
   vertical-align: top;
   display: inline-block;
   width: 11.25em;
-  height: 6.25em;
+  height: 6.75em;
   margin: 4px;
 
   -webkit-transition: all linear 0.1s;
@@ -198,14 +198,16 @@ body.map {
 .objective {
   position: relative;
   z-index: 10;
-  height:100%;
-  width:100%;
+  height: 100%;
+  width: 100%;
   background: white;
   box-shadow:0 1px 2px 0px rgba(0,0,0,0.2);
   box-sizing:border-box;
 
-  header{
+  header {
     display: block;
+    box-sizing: border-box;
+    height: 30%;
     padding: 4px 6px;
     background: @color-main;
     cursor: move;
@@ -214,11 +216,8 @@ body.map {
     color: @color-text-light;
     letter-spacing: 1px;
     text-align: left;
-    font-size:14px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 0px 4px;
+    font-size: 14px;
+    padding: 0 4px;
 
     a {
       pointer-events: none;
@@ -226,22 +225,16 @@ body.map {
       text-decoration: none;
     }
   }
-  p{
+  main {
+    box-sizing: border-box;
+    height: 70%;
+  }
+  p {
     margin:0;
     padding: 6px;
     text-align: left;
     font-size: 12px;
     color: @color-text;
-    height: 3em;
-    overflow: hidden;
-  }
-  footer {
-    text-align: left;
-    position: absolute;
-    bottom:0;
-    width: 100%;
-    font-size:12px;
-    color:@color-text;
   }
 
   .leader {
@@ -256,6 +249,16 @@ body.map {
     box-shadow:0 5px 5px 0 rgba(0,0,0,0.2);
   }
 }
+
+.objective-long {
+  header {
+    height: 50%;
+  }
+  main {
+    height: 50%;
+  }
+}
+
 .webui-popover {
   border-radius: 0;
 }
