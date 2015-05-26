@@ -236,12 +236,7 @@ Template.priority.helpers({
 
 Template.priority.events({
   'dblclick .objective': function (evt, tpl) {
-
-    var objective = this
-
-    console.log('dblclick .objective', objective)
-
-    Session.set('objectiveId', objective._id)
+    Session.set('objectiveId', this._id)
   },
   'click .objective': function (evt) {
     evt.stopPropagation()
@@ -325,7 +320,7 @@ Template.objectiveEdit.helpers({
 
     if (show) {
       // If not already showing, we need to init
-      if (!$('.objective-edit.show').size()) {
+      if (!$('#modal-objective-edit.show').size()) {
         $('#objective-edit-name').focus()
 
         $('#objective-edit-longdesc').trumbowyg({
