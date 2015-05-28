@@ -1,11 +1,8 @@
 NewMapController = RouteController.extend({
   onBeforeAction: function () {
 
-    console.log('new map')
-
     Meteor.call('createMap', function (err, mapId) {
       if (err) return console.error(err)
-      console.log('create map', mapId)
       Router.go('map', {_id: mapId})
     })
 
@@ -251,8 +248,6 @@ Template.priority.events({
     var priority = tpl.data._id
     var map = tpl.data.map
 
-    //console.log('slot:', slot, 'priority:', priority, 'map:', map)
-
     var objectiveId = Objectives.insert({
       name: tpl.data.name.split(' ')[0] +' ' + (slot + 1),
       desc: 'A ' + tpl.data.name,
@@ -313,6 +308,14 @@ Template.objective.helpers({
     }.bind(this))
   }
 })
+Template.objectiveEdit.rendered = function () {
+  $('#checklist').sortable({
+    placeholder: 'checklist-placeholder',
+    stop: function (evt, ui) {
+      setIndexes()
+    }
+  }).disableSelection()
+}
 
 Template.objectiveEdit.helpers({
   show: function () {
@@ -336,6 +339,9 @@ Template.objectiveEdit.helpers({
       $('#objective-edit-longdesc').trumbowyg('destroy')
     }
     return show
+  },
+  getIndex: function (checklist, item) {
+    return checklist.indexOf(item)
   }
 })
 
@@ -354,11 +360,23 @@ Template.objectiveEdit.events({
     } else {
       Objectives.update(objective._id, { $set: { priority: trash._id }})
     }
-
     Session.set('objectiveId', false)
   },
   'click .btn-checklist-add': function (evt) {
     Objectives.update(this._id, {$push: {checklist: {name: '', checked: false}}})
+    setTimeout(function () {
+      var container = $('#objective-edit-checklist .checklist-name').last()
+      $('input', container).focus()
+    }.bind(this), 100)
+  },
+  'click .checklist-remove a': function (evt, tpl) {
+    evt.preventDefault()
+    var index = $(evt.currentTarget).data('item-index')
+    var checklist = editChecklist()
+    var updatedChecklist = checklist.filter(function (item, i) {
+      return i !== index
+    })
+    Objectives.update( tpl.data._id, {$set: {checklist: updatedChecklist}})
   },
   'submit form, click .btn-save': function (evt, tpl) {
     evt.preventDefault()
@@ -375,19 +393,8 @@ Template.objectiveEdit.events({
       return res
     }, {})
 
-    var checklistBoxes = $('#objective-edit-checklist input[type=checkbox]')
-    var checklistNames = $('#objective-edit-checklist input[type=text]')
-
-    var checklist = checklistBoxes.toArray().reduce(function (list, checkbox, i) {
-      var name = $(checklistNames[i]).val()
-      if (name) list.push({name: name, checked: $(checkbox).is(':checked')})
-      return list
-    }, [])
-
-    query.checklist = checklist
+    query.checklist = editChecklist()
     query.modifiedAt = Date.now()
-
-    console.log('click .btn-save', query, values)
 
     Objectives.update(objective._id, {$set: query })
 
@@ -395,3 +402,21 @@ Template.objectiveEdit.events({
   }
 })
 
+function editChecklist () {
+  var checklistBoxes = $('#objective-edit-checklist input[type=checkbox]')
+  var checklistNames = $('#objective-edit-checklist input[type=text]')
+
+  var checklist = checklistBoxes.toArray().reduce(function (list, checkbox, i) {
+    var name = $(checklistNames[i]).val()
+    list.push({name: name, checked: $(checkbox).is(':checked')})
+    return list
+  }, [])
+
+  return checklist
+}
+
+function setIndexes () {
+  $('#checklist').children().each(function (index, item) {
+    $(item).children().last().children().first().data('item-index', index)
+  })
+}
