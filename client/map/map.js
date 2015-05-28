@@ -1,11 +1,8 @@
 NewMapController = RouteController.extend({
   onBeforeAction: function () {
 
-    console.log('new map')
-
     Meteor.call('createMap', function (err, mapId) {
       if (err) return console.error(err)
-      console.log('create map', mapId)
       Router.go('map', {_id: mapId})
     })
 
@@ -251,8 +248,6 @@ Template.priority.events({
     var priority = tpl.data._id
     var map = tpl.data.map
 
-    //console.log('slot:', slot, 'priority:', priority, 'map:', map)
-
     var objectiveId = Objectives.insert({
       name: tpl.data.name.split(' ')[0] +' ' + (slot + 1),
       desc: 'A ' + tpl.data.name,
@@ -313,12 +308,16 @@ Template.objective.helpers({
     }.bind(this))
   }
 })
+
 Template.objectiveEdit.onRendered(function () {
   $('#checklist').sortable({
-    placeholder: 'checklist-placeholder'
-  })
-  $('#checklist').disableSelection()
+    placeholder: 'checklist-placeholder',
+    stop: function (evt, ui) {
+      setIndexes($('#checklist'))
+    }
+  }).disableSelection()
 })
+
 Template.objectiveEdit.helpers({
   show: function () {
     var show = !! Session.get('objectiveId')
@@ -399,8 +398,6 @@ Template.objectiveEdit.events({
     query.checklist = editChecklist()
     query.modifiedAt = Date.now()
 
-    console.log('click .btn-save', query, values)
-
     Objectives.update(objective._id, {$set: query })
 
     Session.set('objectiveId', false)
@@ -418,5 +415,11 @@ function editChecklist () {
   }, [])
 
   return checklist
+}
+
+function setIndexes (checklist) {
+  $('#checklist').children().each(function (index, item) {
+    $(item).children().last().children().first().data('item-index', index)
+  })
 }
 
