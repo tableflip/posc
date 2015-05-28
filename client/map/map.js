@@ -308,15 +308,14 @@ Template.objective.helpers({
     }.bind(this))
   }
 })
-
-Template.objectiveEdit.onRendered(function () {
+Template.objectiveEdit.rendered = function () {
   $('#checklist').sortable({
     placeholder: 'checklist-placeholder',
     stop: function (evt, ui) {
-      setIndexes($('#checklist'))
+      setIndexes()
     }
   }).disableSelection()
-})
+}
 
 Template.objectiveEdit.helpers({
   show: function () {
@@ -361,7 +360,6 @@ Template.objectiveEdit.events({
     } else {
       Objectives.update(objective._id, { $set: { priority: trash._id }})
     }
-
     Session.set('objectiveId', false)
   },
   'click .btn-checklist-add': function (evt) {
@@ -417,9 +415,8 @@ function editChecklist () {
   return checklist
 }
 
-function setIndexes (checklist) {
+function setIndexes () {
   $('#checklist').children().each(function (index, item) {
     $(item).children().last().children().first().data('item-index', index)
   })
 }
-

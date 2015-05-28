@@ -170,27 +170,27 @@
         <div class="input-group">
           <label for="objective-edit-checklist">Checklist</label>
           <div id="objective-edit-checklist">
-            {{#if checklist}}
-              <ul id="checklist">
-              {{#each checklist}}
-                <li class="checklist-item">
-                  <div class="checklist-reorder">
-                    <a href="#"><i class="fa fa-reorder"></i></a>
-                  </div><div class="checklist-checkbox">
-                    {{#if checked}}
-                      <input type="checkbox" checked/>
-                    {{else}}
-                      <input type="checkbox"/>
-                    {{/if}}
-                  </div><div class="checklist-name">
-                    <input type="text" class="form-control" value="{{name}}" />
-                  </div><div class="checklist-remove" >
-                    <a href="#" data-item-index="{{getIndex ../checklist this}}"><i class="fa fa-remove"></i></a>
-                  </div>
-                </li>
-              {{/each}}
-              </ul>
-            {{/if}}
+            <ul id="checklist">
+              {{#if checklist}}
+                {{#each checklist}}
+                  <li class="checklist-item">
+                    <div class="checklist-reorder">
+                      <a href="#"><i class="fa fa-reorder"></i></a>
+                    </div><div class="checklist-checkbox">
+                      {{#if checked}}
+                        <input type="checkbox" checked/>
+                      {{else}}
+                        <input type="checkbox"/>
+                      {{/if}}
+                    </div><div class="checklist-name">
+                      <input type="text" class="form-control" value="{{name}}" />
+                    </div><div class="checklist-remove" >
+                      <a href="#" data-item-index="{{getIndex ../checklist this}}"><i class="fa fa-remove"></i></a>
+                    </div>
+                  </li>
+                {{/each}}
+              {{/if}}
+            </ul>
             <a href="#" class="btn btn-link btn-checklist-add"><i class="fa fa-plus"></i></a>
           </div>
         </div>
