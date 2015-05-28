@@ -313,7 +313,12 @@ Template.objective.helpers({
     }.bind(this))
   }
 })
-
+Template.objectiveEdit.onRendered(function () {
+  $('#checklist').sortable({
+    placeholder: 'checklist-placeholder'
+  })
+  $('#checklist').disableSelection()
+})
 Template.objectiveEdit.helpers({
   show: function () {
     var show = !! Session.get('objectiveId')
