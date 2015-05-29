@@ -24,8 +24,8 @@ where:
 
 Priorities = new Mongo.Collection('priorities', {transform: transform})
 
-// N.B. Last priority _must_ be the trash 
-var priorityNames = ['Top priority', 'Second priority', 'Third priority', 'Fourth priority', 'Trash']
+// N.B. Last priority _must_ be the trash
+var priorityNames = ['Top priority outcome', 'Second priority outcome', 'Third priority outcome', 'Fourth priority outcome', 'Trash']
 
 function transform (priority) {
   priority.name = priorityNames[priority.preferredSlot]

@@ -115,7 +115,7 @@ Template.mapTitle.events({
     toggleMapTitleField()
     var mapId = $('.input-map-title').data('mapid')
     var newTitle = $('.input-map-title').val()
-    if (newTitle === '') newTitle = 'Priorities'
+    if (newTitle === '') newTitle = 'Click to enter POSC Map scope'
     Maps.update({_id: mapId}, {$set: {name: newTitle}})
   },
   'submit form': function (evt) {
@@ -126,7 +126,7 @@ Template.mapTitle.events({
 
 function toggleMapTitleField () {
   $('.map-title').toggle()
-  $('.edit-map-title').toggle() 
+  $('.edit-map-title').toggle()
 }
 
 Template.mapTimeframe.events({
@@ -139,6 +139,7 @@ Template.mapTimeframe.events({
     toggleMapTimeframeField()
     var mapId = $('.input-map-timeframe').data('mapid')
     var newTimeframe = $('.input-map-timeframe').val()
+    if (newTimeframe === '') newTimeframe = 'Click to enter timeframe'
     Maps.update({_id: mapId}, {$set: {timeframe: newTimeframe}})
   },
   'submit form': function (evt) {
@@ -329,7 +330,7 @@ Template.objectiveEdit.helpers({
       }
 
       $('#objective-edit-longdesc').trumbowyg('html', this.longdesc)
-      
+
     } else {
       var form = $('.objective-edit form')[0]
       form && form.reset()
@@ -394,4 +395,3 @@ Template.objectiveEdit.events({
     Session.set('objectiveId', false)
   }
 })
-
