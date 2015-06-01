@@ -308,11 +308,18 @@ Template.objective.helpers({
     }.bind(this))
   }
 })
+
 Template.objectiveEdit.rendered = function () {
   $('#checklist').sortable({
     placeholder: 'checklist-placeholder',
     stop: function (evt, ui) {
-      setIndexes()
+      // Meteor is in charge of the DOM!
+      // Get the current list state (after sort)
+      var checklist = getChecklist()
+      // Cancel the sort (put the DOM back)
+      $('#checklist').sortable('cancel')
+      // Update and let meteor re-render
+      Objectives.update(Session.get('objectiveId'), {$set: {checklist: checklist}})
     }
   }).disableSelection()
 }
@@ -376,7 +383,7 @@ Template.objectiveEdit.events({
     var updatedChecklist = checklist.filter(function (item, i) {
       return i !== index
     })
-    Objectives.update( tpl.data._id, {$set: {checklist: updatedChecklist}})
+    Objectives.update(tpl.data._id, {$set: {checklist: updatedChecklist}})
   },
   'submit form, click .btn-save': function (evt, tpl) {
     evt.preventDefault()
@@ -412,10 +419,4 @@ function getChecklist () {
   })
 
   return checklist
-}
-
-function setIndexes () {
-  $('#checklist [data-item-index]').each(function (index) {
-    $(this).attr('data-item-index', index)
-  })
 }
