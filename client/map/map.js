@@ -371,8 +371,8 @@ Template.objectiveEdit.events({
   },
   'click .checklist-remove a': function (evt, tpl) {
     evt.preventDefault()
-    var index = $(evt.currentTarget).data('item-index')
-    var checklist = editChecklist()
+    var index = parseInt($(evt.currentTarget).attr('data-item-index'))
+    var checklist = getChecklist()
     var updatedChecklist = checklist.filter(function (item, i) {
       return i !== index
     })
@@ -393,7 +393,7 @@ Template.objectiveEdit.events({
       return res
     }, {})
 
-    query.checklist = editChecklist()
+    query.checklist = getChecklist()
     query.modifiedAt = Date.now()
 
     Objectives.update(objective._id, {$set: query })
@@ -402,21 +402,20 @@ Template.objectiveEdit.events({
   }
 })
 
-function editChecklist () {
+function getChecklist () {
   var checklistBoxes = $('#objective-edit-checklist input[type=checkbox]')
   var checklistNames = $('#objective-edit-checklist input[type=text]')
 
-  var checklist = checklistBoxes.toArray().reduce(function (list, checkbox, i) {
+  var checklist = checklistBoxes.toArray().map(function (checkbox, i) {
     var name = $(checklistNames[i]).val()
-    list.push({name: name, checked: $(checkbox).is(':checked')})
-    return list
-  }, [])
+    return {name: name, checked: $(checkbox).is(':checked')}
+  })
 
   return checklist
 }
 
 function setIndexes () {
-  $('#checklist').children().each(function (index, item) {
-    $(item).children().last().children().first().data('item-index', index)
+  $('#checklist [data-item-index]').each(function (index) {
+    $(this).attr('data-item-index', index)
   })
 }
