@@ -377,6 +377,11 @@ Template.objectiveEdit.events({
       $('input', container).focus()
     }.bind(this), 100)
   },
+  'click .checklist-name': function (evt, tpl) {
+    var input = $(evt.target)
+    var val = input.val()
+    input.focus().val('').val(val) //firefox workaround to focus field correctly
+  },
   'click .checklist-remove a': function (evt, tpl) {
     evt.preventDefault()
     var index = parseInt($(evt.currentTarget).attr('data-item-index'))
